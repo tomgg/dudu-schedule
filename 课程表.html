@@ -401,35 +401,34 @@
 <body>
 
 <div class="page-wrapper">
-  <!-- 左侧装饰 -->
-  <div class="deco-side deco-left">
-    <span>🌈</span>
-    <span>📚</span>
-    <span>🎵</span>
-    <span>⭐</span>
-    <span>🏀</span>
-    <span>🎨</span>
-    <span>🌻</span>
-    <span>🦋</span>
-    <span>🎈</span>
-    <span>🐰</span>
-  </div>
-
-  <!-- 右侧装饰 -->
-  <div class="deco-side deco-right">
-    <span>🌟</span>
-    <span>🎹</span>
-    <span>🐱</span>
-    <span>🎯</span>
-    <span>🌸</span>
-    <span>🦄</span>
-    <span>🍭</span>
-    <span>🐳</span>
-    <span>🎪</span>
-    <span>🌞</span>
-  </div>
-
   <div class="container">
+    <!-- 左侧装饰 -->
+    <div class="deco-side deco-left">
+      <span>🌈</span>
+      <span>📚</span>
+      <span>🎵</span>
+      <span>⭐</span>
+      <span>🏀</span>
+      <span>🎨</span>
+      <span>🌻</span>
+      <span>🦋</span>
+      <span>🎈</span>
+      <span>🐰</span>
+    </div>
+
+    <!-- 右侧装饰 -->
+    <div class="deco-side deco-right">
+      <span>🌟</span>
+      <span>🎹</span>
+      <span>🐱</span>
+      <span>🎯</span>
+      <span>🌸</span>
+      <span>🦄</span>
+      <span>🍭</span>
+      <span>🐳</span>
+      <span>🎪</span>
+      <span>🌞</span>
+    </div>
     <!-- 四角装饰 -->
     <span class="corner-deco tl">🌈</span>
     <span class="corner-deco tr">⭐</span>
@@ -945,6 +944,7 @@
         <span class="time-display" id="dbg-time-label">09:00</span>
       </div>
       <button id="dbg-reset">恢复当前时间</button>
+      <button id="dbg-fullscreen" style="margin-left:6px">📺 全屏模式</button>
     </div>
   `;
   panel.style.display = 'none';
@@ -995,6 +995,25 @@
       panel.style.display = 'none';
       panel.classList.add('collapsed');
     }
+  });
+
+  // 全屏切换
+  const fsBtn = document.getElementById('dbg-fullscreen');
+  fsBtn.addEventListener('click', () => {
+    const doc = document.documentElement;
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+      (doc.requestFullscreen || doc.webkitRequestFullscreen).call(doc);
+      fsBtn.textContent = '📺 退出全屏';
+    } else {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      fsBtn.textContent = '📺 全屏模式';
+    }
+  });
+  document.addEventListener('fullscreenchange', () => {
+    fsBtn.textContent = (document.fullscreenElement || document.webkitFullscreenElement) ? '📺 退出全屏' : '📺 全屏模式';
+  });
+  document.addEventListener('webkitfullscreenchange', () => {
+    fsBtn.textContent = (document.fullscreenElement || document.webkitFullscreenElement) ? '📺 退出全屏' : '📺 全屏模式';
   });
 
   let debugMode = false;
