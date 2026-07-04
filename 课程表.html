@@ -192,6 +192,7 @@
     text-align: center; padding: 2px 4px; font-size: 18px;
     border-radius: 6px; vertical-align: middle;
     transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
   }
   td:not(.time-cell):not(.empty):hover {
     transform: scale(1.05);
@@ -322,6 +323,9 @@
 
   /* 响应式 - 平板竖屏 */
   @media (max-width: 900px) {
+    table { table-layout: auto; border-spacing: 1px; }
+    col.time-col { width: auto; }
+    th:first-child { min-width: auto; }
     .deco-side { width: 40px; font-size: 32px; gap: 20px; }
     .deco-left { left: 0; padding-top: 70px; }
     .deco-right { right: 0; padding-top: 90px; }
@@ -330,6 +334,7 @@
     h1 { font-size: 24px; }
     td, th { font-size: 13px; padding: 3px 2px; }
     td .ico { font-size: 20px; }
+    .time-cell { font-size: 12px !important; }
     .corner-deco { font-size: 36px; }
   }
 
