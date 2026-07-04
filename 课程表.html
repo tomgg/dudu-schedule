@@ -318,12 +318,60 @@
     opacity: 0.7;
   }
 
-  /* 响应式 */
+  /* 响应式 - 平板竖屏 */
   @media (max-width: 900px) {
     .deco-left, .deco-right { display: none; }
-    .container { padding: 20px; }
-    h1 { font-size: 28px; }
-    td, th { font-size: 11px; padding: 6px 3px; }
+    .container { padding: 12px; }
+    h1 { font-size: 24px; }
+    td, th { font-size: 13px; padding: 3px 2px; }
+    td .ico { font-size: 20px; }
+    .corner-deco { font-size: 36px; }
+  }
+
+  /* 响应式 - 手机 */
+  @media (max-width: 768px) {
+    body {
+      overflow: auto;
+      height: auto;
+      min-height: 100vh;
+      padding: 6px;
+    }
+    body::before, body::after { display: none; }
+    .deco-left, .deco-right { display: none; }
+    .corner-deco { font-size: 28px; }
+    .corner-deco.tl { top: -8px; left: -8px; }
+    .corner-deco.tr { top: -8px; right: -8px; }
+    .corner-deco.bl { bottom: -8px; left: -8px; }
+    .corner-deco.br { bottom: -8px; right: -8px; }
+    .container { padding: 8px; border-radius: 16px; }
+    h1 { font-size: 20px; letter-spacing: 1px; }
+    .title-icons { font-size: 18px; letter-spacing: 3px; }
+    .subtitle { font-size: 10px; }
+    .marquee-track span { font-size: 13px; }
+    th { font-size: 12px; padding: 4px 2px; border-radius: 5px; }
+    td { font-size: 12px; padding: 2px 1px; border-radius: 4px; }
+    td .ico { font-size: 16px; margin-right: 0; }
+    .time-cell { font-size: 10px !important; min-width: auto !important; }
+    .legend { gap: 6px 12px; margin-top: 14px; padding: 8px; font-size: 11px; }
+    .legend span { font-size: 11px; }
+    .notes { padding: 8px 12px; font-size: 11px; }
+    .footer-deco { font-size: 16px; letter-spacing: 6px; margin-top: 10px; }
+    #debug-panel { bottom: 8px; right: 8px; font-size: 12px; }
+  }
+
+  /* 响应式 - 小手机 */
+  @media (max-width: 420px) {
+    body { padding: 3px; }
+    .container { padding: 5px; border-radius: 12px; }
+    h1 { font-size: 17px; }
+    .corner-deco { font-size: 22px; }
+    th { font-size: 10px; padding: 3px 1px; }
+    td { font-size: 10px; padding: 1px; }
+    td .ico { font-size: 13px; }
+    .time-cell { font-size: 9px !important; }
+    .marquee-wrap { padding: 3px 0; margin-bottom: 4px; }
+    .marquee-track span { font-size: 11px; }
+    .title-area { margin-bottom: 4px; }
   }
 </style>
 </head>
