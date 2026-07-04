@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>章梓淇 课程表</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: linear-gradient(180deg, #a8edea 0%, #fed6e3 40%, #d4fc79 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding: 10px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 背景浮动云朵 */
+  body::before {
+    content: "☁️";
+    position: fixed;
+    top: 60px;
+    left: 30px;
+    font-size: 60px;
+    opacity: 0.5;
+    animation: float 6s ease-in-out infinite;
+  }
+  body::after {
+    content: "☁️";
+    position: fixed;
+    top: 30px;
+    right: 80px;
+    font-size: 80px;
+    opacity: 0.4;
+    animation: float 8s ease-in-out infinite 1s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .page-wrapper {
+    position: relative;
+    max-width: 1500px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 侧边装饰（共享） */
+  .deco-side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 36px;
+    font-size: 56px;
+  }
+  .deco-side span {
+    display: block;
+    animation: bounce 3s ease-in-out infinite;
+  }
+  .deco-left { left: -120px; padding-top: 80px; }
+  .deco-left span:nth-child(2n) { animation-delay: 0.5s; }
+  .deco-left span:nth-child(3n) { animation-delay: 1s; }
+  .deco-left span:nth-child(4n) { animation-delay: 1.5s; }
+  .deco-right { right: -120px; padding-top: 120px; }
+  .deco-right span:nth-child(2n) { animation-delay: 0.7s; }
+  .deco-right span:nth-child(3n) { animation-delay: 1.2s; }
+
+  .container {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1), 0 0 0 4px rgba(255,255,255,0.6);
+    padding: 20px;
+    width: 100%;
+    flex: 1;
+    position: relative;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 四角装饰 */
+  .corner-deco {
+    position: absolute;
+    font-size: 56px;
+    z-index: 2;
+  }
+  .corner-deco.tl { top: -15px; left: -15px; animation: wiggle 3s ease-in-out infinite; }
+  .corner-deco.tr { top: -15px; right: -15px; animation: wiggle 3s ease-in-out infinite 0.5s; }
+  .corner-deco.bl { bottom: -15px; left: -15px; animation: wiggle 3s ease-in-out infinite 1s; }
+  .corner-deco.br { bottom: -15px; right: -15px; animation: wiggle 3s ease-in-out infinite 1.5s; }
+
+  /* 跑马灯 */
+  .marquee-wrap {
+    overflow: hidden;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb, #84fab0, #8fd3f4, #ff9a9e);
+    background-size: 300% 100%;
+    animation: marquee-bg 6s linear infinite;
+    padding: 6px 0;
+    margin-bottom: 8px;
+  }
+  .marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee-scroll 18s linear infinite;
+    width: max-content;
+  }
+  .marquee-track span {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    letter-spacing: 2px;
+    padding: 0 8px;
+  }
+  @keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marquee-bg {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+
+  /* 标题 */
+  .title-area { text-align: center; margin-bottom: 10px; }
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe, #43e97b);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 4s ease infinite;
+    display: inline-block;
+    letter-spacing: 2px;
+  }
+  .title-icons {
+    font-size: 24px;
+    margin-bottom: 2px;
+    letter-spacing: 6px;
+  }
+  .subtitle {
+    color: #999;
+    font-size: 12px;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+
+  /* 表格 */
+  table { width: 100%; border-collapse: separate; border-spacing: 2px; table-layout: fixed; flex: 1; }
+  col.time-col { width: 12%; }
+  col.day-col { width: 12.57%; }
+  th {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; padding: 4px 4px; font-size: 19px;
+    font-weight: 700; border-radius: 8px; text-align: center;
+    letter-spacing: 1px;
+  }
+  th:first-child {
+    background: linear-gradient(135deg, #4a5568, #2d3748);
+    min-width: 100px;
+  }
+  td {
+    text-align: center; padding: 2px 4px; font-size: 18px;
+    border-radius: 6px; vertical-align: middle;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  td:not(.time-cell):not(.empty):hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    z-index: 1;
+    position: relative;
+  }
+  .time-cell {
+    background: #f7fafc; color: #4a5568; font-weight: 700;
+    font-size: 19px; white-space: nowrap;
+  }
+  .empty { background: #f9fafb; color: #d1d5db; }
+
+  /* 课程色块（共享白色文字） */
+  .eng-polly, .eng-reading, .eng-cartoon,
+  .think, .sport, .sport-out, .free,
+  .art-piano, .art-draw, .dinner { color: #fff; }
+  .eng-polly, .think, .sport, .sport-out, .art-piano, .art-draw { font-weight: 600; }
+  .eng-reading, .eng-cartoon, .free, .dinner { font-weight: 500; }
+
+  /* 英文类 - 蓝色系 */
+  .eng-polly   { background: linear-gradient(135deg, #2b6cb0, #2c5282); }
+  .eng-reading { background: linear-gradient(135deg, #4299e1, #3182ce); }
+  .eng-cartoon { background: linear-gradient(135deg, #63b3ed, #4299e1); }
+  /* 思维类 - 紫色系 */
+  .think       { background: linear-gradient(135deg, #805ad5, #6b46c1); }
+  /* 运动类 - 绿色系 */
+  .sport       { background: linear-gradient(135deg, #38a169, #276749); }
+  .sport-out   { background: linear-gradient(135deg, #48bb78, #38a169); }
+  .free        { background: linear-gradient(135deg, #68d391, #48bb78); }
+  /* 艺术类 - 粉色系 */
+  .art-piano   { background: linear-gradient(135deg, #d53f8c, #b83280); }
+  .art-draw    { background: linear-gradient(135deg, #ed64a6, #d53f8c); }
+  /* 其他 */
+  .dinner      { background: linear-gradient(135deg, #f6ad55, #ed8936); }
+  .rest        { background: linear-gradient(135deg, #e2e8f0, #cbd5e0); color: #718096; font-weight: 500; }
+
+  td .ico { font-size: 30px; display: inline; margin-right: 2px; vertical-align: middle; }
+
+  /* 当前课程高亮+闪烁 */
+  .current {
+    animation: rainbow-border 3s linear infinite, rainbow-bg 3s linear infinite, pulse-scale 1.5s ease-in-out infinite;
+    outline: 4px solid;
+    outline-offset: -2px;
+    position: relative;
+    z-index: 5;
+  }
+  @keyframes pulse-scale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+  }
+  @keyframes rainbow-bg {
+    0%      { background: rgba(255,0,0,0.35); }
+    14%     { background: rgba(255,136,0,0.35); }
+    28%     { background: rgba(255,221,0,0.35); }
+    42%     { background: rgba(0,204,0,0.35); }
+    57%     { background: rgba(0,136,255,0.35); }
+    71%     { background: rgba(68,0,255,0.35); }
+    85%     { background: rgba(204,0,255,0.35); }
+    100%    { background: rgba(255,0,0,0.35); }
+  }
+  .current-time-row .time-cell {
+    animation: pulse-time 2s ease-in-out infinite;
+    color: #fff !important;
+  }
+  .current-day {
+    animation: pulse-day 2s ease-in-out infinite;
+    color: #fff !important;
+  }
+  @keyframes rainbow-border {
+    0%      { outline-color: #ff0000; box-shadow: 0 0 18px #ff0000, 0 0 40px rgba(255,0,0,0.3); }
+    14%     { outline-color: #ff8800; box-shadow: 0 0 18px #ff8800, 0 0 40px rgba(255,136,0,0.3); }
+    28%     { outline-color: #ffdd00; box-shadow: 0 0 18px #ffdd00, 0 0 40px rgba(255,221,0,0.3); }
+    42%     { outline-color: #00cc00; box-shadow: 0 0 18px #00cc00, 0 0 40px rgba(0,204,0,0.3); }
+    57%     { outline-color: #0088ff; box-shadow: 0 0 18px #0088ff, 0 0 40px rgba(0,136,255,0.3); }
+    71%     { outline-color: #4400ff; box-shadow: 0 0 18px #4400ff, 0 0 40px rgba(68,0,255,0.3); }
+    85%     { outline-color: #cc00ff; box-shadow: 0 0 18px #cc00ff, 0 0 40px rgba(204,0,255,0.3); }
+    100%    { outline-color: #ff0000; box-shadow: 0 0 18px #ff0000, 0 0 40px rgba(255,0,0,0.3); }
+  }
+  @keyframes pulse-time {
+    0%, 100% { background: #e53e3e; box-shadow: 0 0 10px rgba(229, 62, 62, 0.6); }
+    50% { background: #fc8181; box-shadow: 0 0 20px rgba(229, 62, 62, 0.9); }
+  }
+  @keyframes pulse-day {
+    0%, 100% { background: linear-gradient(135deg, #f093fb, #f5576c); box-shadow: 0 0 10px rgba(240, 147, 251, 0.6); }
+    50% { background: linear-gradient(135deg, #f5576c, #f093fb); box-shadow: 0 0 20px rgba(245, 87, 108, 0.9); }
+  }
+
+  .section-divider td { padding: 4px; background: transparent; }
+  .section-divider .time-cell { background: transparent; color: #a0aec0; font-size: 11px; letter-spacing: 2px; }
+
+  /* 图例 */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 16px 28px;
+    margin-top: 28px; justify-content: center;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    padding: 20px 24px;
+    border-radius: 16px;
+  }
+  .legend-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .legend-group-title {
+    font-size: 11px; color: #8B5E3C; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #555; font-weight: 600; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+
+  /* 备注 */
+  .notes {
+    margin-top: 24px; padding: 20px;
+    background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
+    border-radius: 16px;
+    border-left: 5px solid #4dd0e1;
+  }
+  .notes h3 { font-size: 15px; color: #00796b; margin-bottom: 10px; font-weight: 700; }
+  .notes ul { list-style: none; padding: 0; }
+  .notes li { font-size: 13px; color: #546e7a; padding: 4px 0; padding-left: 20px; position: relative; font-weight: 500; }
+  .notes li::before { content: "\2022"; position: absolute; left: 0; color: #4dd0e1; font-weight: bold; }
+
+  /* 底部装饰 */
+  .footer-deco {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 24px;
+    letter-spacing: 12px;
+    opacity: 0.7;
+  }
+
+  /* 响应式 */
+  @media (max-width: 900px) {
+    .deco-left, .deco-right { display: none; }
+    .container { padding: 20px; }
+    h1 { font-size: 28px; }
+    td, th { font-size: 11px; padding: 6px 3px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+  <!-- 左侧装饰 -->
+  <div class="deco-side deco-left">
+    <span>🌈</span>
+    <span>📚</span>
+    <span>🎵</span>
+    <span>⭐</span>
+    <span>🏀</span>
+    <span>🎨</span>
+    <span>🌻</span>
+    <span>🦋</span>
+    <span>🎈</span>
+    <span>🐰</span>
+  </div>
+
+  <!-- 右侧装饰 -->
+  <div class="deco-side deco-right">
+    <span>🌟</span>
+    <span>🎹</span>
+    <span>🐱</span>
+    <span>🎯</span>
+    <span>🌸</span>
+    <span>🦄</span>
+    <span>🍭</span>
+    <span>🐳</span>
+    <span>🎪</span>
+    <span>🌞</span>
+  </div>
+
+  <div class="container">
+    <!-- 四角装饰 -->
+    <span class="corner-deco tl">🌈</span>
+    <span class="corner-deco tr">⭐</span>
+    <span class="corner-deco bl">🎈</span>
+    <span class="corner-deco br">🌸</span>
+
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <span>🌈 好好学习 🎹 天天向上 🏀 加油章梓淇 🎨 你最棒 ⭐ 每天进步一点点 🦄 开心暑假 🌻 快乐成长 🐳 勇敢探索 🎯 坚持就是胜利 🌸 </span>
+        <span>🌈 好好学习 🎹 天天向上 🏀 加油章梓淇 🎨 你最棒 ⭐ 每天进步一点点 🦄 开心暑假 🌻 快乐成长 🐳 勇敢探索 🎯 坚持就是胜利 🌸 </span>
+      </div>
+    </div>
+
+    <div class="title-area">
+      <h1>章梓淇 假期课程表</h1>
+    </div>
+
+    <table>
+      <colgroup>
+        <col class="time-col">
+        <col class="day-col" span="7">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>时间</th><th>周一</th><th>周二</th><th>周三</th><th>周四</th><th>周五</th><th>周六</th><th>周日</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="time-cell">07:30 - 08:00</td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌤</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌞</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌻</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">💪</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">😊</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌈</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌈</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">08:00 - 08:30</td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">08:30 - 09:00</td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td><td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td><td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td><td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td><td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td><td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+        </tr>
+        <!-- 09:00 起 周一~五早上打卡，周六周日不变 -->
+        <tr>
+          <td class="time-cell">09:00 - 09:30</td>
+          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td><td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td><td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
+          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td><td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
+          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">09:30 - 10:00</td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td><td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td><td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td><td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="art-draw" rowspan="4"><span class="ico">🎨</span> 美术 <span class="ico">🖌</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">10:00 - 10:30</td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td><td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td><td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td><td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
+        </tr>
+        <!-- 10:30 起 周一~五自由活动 -->
+        <tr>
+          <td class="time-cell">10:30 - 11:00</td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td><td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td><td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td><td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">11:00 - 11:30</td>
+          <td class="eng-reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td><td class="eng-reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td><td class="eng-reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td>
+          <td class="eng-reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td><td class="eng-reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">11:30 - 12:30</td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td><td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td><td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td><td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td><td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">12:30 - 14:30</td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">14:30 - 15:30</td>
+          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td><td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td><td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
+          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td><td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
+          <td class="sport-out" rowspan="3"><span class="ico">🛝</span> 户外运动 <span class="ico">🌳</span></td>
+          <td class="art-piano"><span class="ico">🎹</span> 钢琴 <span class="ico">🎵</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">15:30 - 16:30</td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td><td class="art-piano"><span class="ico">🎹</span> 练琴 <span class="ico">🎶</span></td><td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td><td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">16:30 - 17:30</td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="sport"><span class="ico">🏀</span> 篮球 <span class="ico">⛹</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="sport"><span class="ico">🏀</span> 篮球 <span class="ico">⛹</span></td>
+          <td class="sport"><span class="ico">🤸</span> 跳绳 <span class="ico">🏅</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">17:30 - 18:30</td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">18:30 - 19:00</td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">19:00 - 19:30</td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td><td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td><td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td><td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td><td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">19:30 - 20:00</td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">20:00 - 20:30</td>
+          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
+          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">20:30 - 07:30</td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+
+  </div>
+</div>
+
+<script>
+(function() {
+  const tbody = document.querySelector('table tbody');
+  const { rows } = tbody;
+  const numRows = rows.length;
+  const numCols = 8;
+
+  const grid = Array.from({ length: numRows }, () => new Array(numCols));
+  for (let r = 0; r < numRows; r++) {
+    const cells = rows[r].cells;
+    let c = 0;
+    for (let ci = 0; ci < cells.length; ci++) {
+      while (c < numCols && grid[r][c]) c++;
+      if (c >= numCols) break;
+      const cell = cells[ci];
+      const rs = cell.rowSpan || 1;
+      const cs = cell.colSpan || 1;
+      for (let dr = 0; dr < rs; dr++) {
+        for (let dc = 0; dc < cs; dc++) {
+          if (r + dr < numRows && c + dc < numCols) {
+            grid[r + dr][c + dc] = cell;
+          }
+        }
+      }
+      c += cs;
+    }
+  }
+
+  const ths = document.querySelectorAll('table thead th');
+  let audioCtx;
+  let prevCell = null;
+
+  let bellNodes = null;
+
+  function stopBell() {
+    if (!bellNodes) return;
+    const { oscs, master, ctx } = bellNodes;
+    const t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(master.gain.value, t);
+    master.gain.linearRampToValueAtTime(0, t + 0.3);
+    oscs.forEach(o => o.stop(t + 0.4));
+    bellNodes = null;
+  }
+  window._stopBell = stopBell;
+
+  function playBell() {
+    stopBell();
+    if (window._stopClickSound) window._stopClickSound();
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    const t = ctx.currentTime;
+    const dur = 22.4;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.15, t);
+    master.gain.linearRampToValueAtTime(0.7, t + dur * 0.85);
+    master.gain.linearRampToValueAtTime(0.5, t + dur);
+    master.connect(ctx.destination);
+
+    // 第一段: 531 531 222-4345  第二段: 531 531 222-4321
+    const melody = [
+      // 第一段
+      { f: 784, start: 0 },      // sol
+      { f: 659, start: 0.35 },   // mi
+      { f: 523, start: 0.7 },    // do
+      { f: 784, start: 1.3 },    // sol
+      { f: 659, start: 1.65 },   // mi
+      { f: 523, start: 2.0 },    // do
+      { f: 587, start: 2.6 },    // re
+      { f: 587, start: 2.95 },   // re
+      { f: 587, start: 3.3 },    // re
+      { f: 698, start: 3.65 },   // fa
+      { f: 659, start: 4.0 },    // mi
+      { f: 698, start: 4.35 },   // fa
+      { f: 784, start: 4.7 },    // sol
+      // 第二段
+      { f: 784, start: 5.5 },    // sol
+      { f: 659, start: 5.85 },   // mi
+      { f: 523, start: 6.2 },    // do
+      { f: 784, start: 6.8 },    // sol
+      { f: 659, start: 7.15 },   // mi
+      { f: 523, start: 7.5 },    // do
+      { f: 587, start: 8.1 },    // re
+      { f: 587, start: 8.45 },   // re
+      { f: 587, start: 8.8 },    // re
+      { f: 698, start: 9.15 },   // fa
+      { f: 659, start: 9.5 },    // mi
+      { f: 587, start: 9.85 },   // re
+      { f: 523, start: 10.2 },   // do
+    ];
+    const loopLen = 11.2;
+    const repeats = 2;
+    const oscs = [];
+
+    for (let i = 0; i < repeats; i++) {
+      melody.forEach(note => {
+        const offset = t + i * loopLen + note.start;
+        if (offset >= t + dur) return;
+
+        const env = ctx.createGain();
+        env.connect(master);
+
+        // 钢琴音色：基频 + 2倍频 + 3倍频，快速起音、自然衰减
+        const partials = [
+          { ratio: 1, vol: 0.5 },
+          { ratio: 2, vol: 0.15 },
+          { ratio: 3, vol: 0.06 },
+        ];
+        partials.forEach(p => {
+          const osc = ctx.createOscillator();
+          const pGain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(note.f * p.ratio, offset);
+          pGain.gain.setValueAtTime(p.vol, offset);
+          pGain.gain.exponentialRampToValueAtTime(p.vol * 0.3, offset + 0.6);
+          osc.connect(pGain);
+          pGain.connect(env);
+          osc.start(offset);
+          osc.stop(offset + 0.7);
+          oscs.push(osc);
+        });
+
+        env.gain.setValueAtTime(0, offset);
+        env.gain.linearRampToValueAtTime(1, offset + 0.01);
+        env.gain.exponentialRampToValueAtTime(0.01, offset + 0.65);
+      });
+    }
+
+    bellNodes = { oscs, master, ctx };
+    setTimeout(() => { bellNodes = null; }, dur * 1000);
+  }
+
+  // 勃拉姆斯摇篮曲 —— 午休/睡觉时播放
+  function playLullaby() {
+    stopBell();
+    if (window._stopClickSound) window._stopClickSound();
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    const t = ctx.currentTime;
+    const beat = 0.8;
+
+    const melody = [
+      // 第一句: mi mi sol | mi mi sol
+      { f: 330, start: 0 },
+      { f: 330, start: beat },
+      { f: 392, start: beat * 2, len: beat * 1.5 },
+      { f: 330, start: beat * 4 },
+      { f: 330, start: beat * 5 },
+      { f: 392, start: beat * 6, len: beat * 1.5 },
+      // mi sol do' si la
+      { f: 330, start: beat * 8 },
+      { f: 392, start: beat * 9 },
+      { f: 523, start: beat * 10, len: beat * 1.2 },
+      { f: 494, start: beat * 11.5 },
+      { f: 440, start: beat * 12.5, len: beat * 1.5 },
+      // la sol fa | fa la do'
+      { f: 440, start: beat * 14.5 },
+      { f: 392, start: beat * 15.5 },
+      { f: 349, start: beat * 16.5, len: beat * 1.2 },
+      { f: 349, start: beat * 18 },
+      { f: 440, start: beat * 19 },
+      { f: 523, start: beat * 20, len: beat * 1.2 },
+      // si la sol
+      { f: 494, start: beat * 21.5 },
+      { f: 440, start: beat * 22.5 },
+      { f: 392, start: beat * 23.5, len: beat * 2 },
+    ];
+
+    const dur = beat * 26;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.3, t);
+    master.gain.linearRampToValueAtTime(0.25, t + dur * 0.7);
+    master.gain.linearRampToValueAtTime(0.05, t + dur);
+    master.connect(ctx.destination);
+
+    // 轻柔混响效果
+    const reverb = ctx.createGain();
+    reverb.gain.value = 0.12;
+    reverb.connect(master);
+
+    const oscs = [];
+    melody.forEach(note => {
+      const offset = t + note.start;
+      const noteLen = note.len || beat * 0.9;
+      if (offset >= t + dur) return;
+
+      const env = ctx.createGain();
+      env.connect(master);
+
+      // 柔和音色：基频 + 轻微泛音
+      [
+        { ratio: 1, vol: 0.4 },
+        { ratio: 2, vol: 0.08 },
+      ].forEach(p => {
+        const osc = ctx.createOscillator();
+        const pGain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.f * p.ratio, offset);
+        pGain.gain.setValueAtTime(p.vol, offset);
+        pGain.gain.exponentialRampToValueAtTime(p.vol * 0.15, offset + noteLen);
+        osc.connect(pGain);
+        pGain.connect(env);
+        osc.start(offset);
+        osc.stop(offset + noteLen + 0.2);
+        oscs.push(osc);
+      });
+
+      // 回声（延迟叠加）
+      const echo = ctx.createOscillator();
+      const echoGain = ctx.createGain();
+      echo.type = 'sine';
+      echo.frequency.setValueAtTime(note.f * 2, offset + 0.15);
+      echoGain.gain.setValueAtTime(0.03, offset + 0.15);
+      echoGain.gain.exponentialRampToValueAtTime(0.001, offset + noteLen + 0.3);
+      echo.connect(echoGain);
+      echoGain.connect(reverb);
+      echo.start(offset + 0.15);
+      echo.stop(offset + noteLen + 0.4);
+      oscs.push(echo);
+
+      env.gain.setValueAtTime(0, offset);
+      env.gain.linearRampToValueAtTime(1, offset + 0.03);
+      env.gain.exponentialRampToValueAtTime(0.01, offset + noteLen);
+    });
+
+    bellNodes = { oscs, master, ctx };
+    setTimeout(() => { bellNodes = null; }, dur * 1000);
+  }
+
+  function highlight(colIndex, currentMins) {
+    document.querySelectorAll('.current').forEach(el => el.classList.remove('current'));
+    document.querySelectorAll('.current-time-row').forEach(el => el.classList.remove('current-time-row'));
+    document.querySelectorAll('.current-day').forEach(el => el.classList.remove('current-day'));
+
+    if (ths[colIndex]) ths[colIndex].classList.add('current-day');
+
+    for (let r = 0; r < numRows; r++) {
+      const timeCell = grid[r][0];
+      if (!timeCell) continue;
+      const match = timeCell.textContent.trim().match(/(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})/);
+      if (!match) continue;
+      const startMins = parseInt(match[1]) * 60 + parseInt(match[2]);
+      const endMins = parseInt(match[3]) * 60 + parseInt(match[4]);
+      const inRange = endMins > startMins
+        ? currentMins >= startMins && currentMins < endMins
+        : currentMins >= startMins || currentMins < endMins;
+      if (inRange) {
+        const targetCell = grid[r][colIndex];
+        if (targetCell && !targetCell.classList.contains('empty')) {
+          targetCell.classList.add('current');
+          if (prevCell !== targetCell) {
+            if (prevCell !== null) {
+              const txt = targetCell.textContent || '';
+              if (txt.includes('午休') || txt.includes('睡觉')) {
+                playLullaby();
+              } else {
+                playBell();
+              }
+            }
+            prevCell = targetCell;
+          }
+        } else {
+          if (prevCell !== null) { playBell(); prevCell = null; }
+        }
+        for (let hr = 0; hr < numRows; hr++) {
+          if (grid[hr][0] === timeCell) rows[hr].classList.add('current-time-row');
+        }
+        break;
+      }
+    }
+  }
+
+  // 静音音频保活：防止 iOS 锁屏后暂停 JS
+  function startKeepAlive() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+    const src = audioCtx.createBufferSource();
+    const silentGain = audioCtx.createGain();
+    silentGain.gain.value = 0.001;
+    src.buffer = buf;
+    src.loop = true;
+    src.connect(silentGain);
+    silentGain.connect(audioCtx.destination);
+    src.start();
+  }
+  document.addEventListener('click', () => startKeepAlive(), { once: true });
+  document.addEventListener('touchstart', () => startKeepAlive(), { once: true });
+
+  // 初始高亮
+  const now = new Date();
+  highlight(now.getDay() || 7, now.getHours() * 60 + now.getMinutes());
+
+  // 调试面板
+  const panel = document.createElement('div');
+  panel.id = 'debug-panel';
+  panel.innerHTML = `
+    <style>
+      #debug-panel {
+        position: fixed; bottom: 16px; right: 16px; z-index: 999;
+        background: rgba(0,0,0,0.85); color: #fff; padding: 14px 18px;
+        border-radius: 12px; font-size: 14px; font-family: sans-serif;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+      }
+      #debug-panel.collapsed {
+        padding: 8px 12px;
+        background: rgba(0,0,0,0.7);
+      }
+      #debug-panel.collapsed .dbg-body,
+      #debug-panel.collapsed .dbg-title { display: none; }
+      #debug-panel label { display: block; margin-bottom: 8px; font-weight: 600; }
+      #debug-panel select, #debug-panel input {
+        padding: 4px 8px; border-radius: 6px; border: none;
+        font-size: 14px; margin-left: 6px;
+      }
+      #debug-panel .row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+      #debug-panel .time-display { color: #fbd38d; font-weight: 700; min-width: 50px; }
+      #debug-panel button {
+        margin-top: 6px; padding: 4px 12px; border: none; border-radius: 6px;
+        background: #4299e1; color: #fff; cursor: pointer; font-size: 13px;
+      }
+      #debug-panel button:hover { background: #3182ce; }
+      #dbg-toggle {
+        position: absolute; top: 8px; right: 8px;
+        background: none; border: none; color: #fbd38d;
+        font-size: 18px; cursor: pointer; margin: 0; padding: 0;
+      }
+    </style>
+    <button id="dbg-toggle">▶</button>
+    <div class="dbg-title" style="margin-bottom: 8px; font-weight: 700; color: #fbd38d;">🛠 调试面板</div>
+    <div class="dbg-body">
+      <div class="row">
+        <label>星期
+          <select id="dbg-day">
+            <option value="1">周一</option><option value="2">周二</option>
+            <option value="3">周三</option><option value="4">周四</option>
+            <option value="5">周五</option><option value="6">周六</option>
+            <option value="7">周日</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label>时间 <input type="range" id="dbg-time" min="0" max="1439" value="540" style="width:160px"></label>
+        <span class="time-display" id="dbg-time-label">09:00</span>
+      </div>
+      <button id="dbg-reset">恢复当前时间</button>
+    </div>
+  `;
+  panel.style.display = 'none';
+  panel.classList.add('collapsed');
+  document.body.appendChild(panel);
+
+  // 连续点击标题5次打开调试面板
+  let tapCount = 0, tapTimer = null;
+  const title = document.querySelector('h1') || document.querySelector('.schedule-title');
+  if (title) {
+    title.addEventListener('click', () => {
+      tapCount++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => tapCount = 0, 2000);
+      if (tapCount >= 5) {
+        tapCount = 0;
+        panel.style.display = '';
+        panel.classList.remove('collapsed');
+        toggleBtn.textContent = '◀';
+      }
+    });
+  }
+
+  const daySelect = document.getElementById('dbg-day');
+  const timeSlider = document.getElementById('dbg-time');
+  const timeLabel = document.getElementById('dbg-time-label');
+  const resetBtn = document.getElementById('dbg-reset');
+
+  daySelect.value = now.getDay() || 7;
+  timeSlider.value = now.getHours() * 60 + now.getMinutes();
+
+  function formatMins(m) {
+    return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+  }
+  timeLabel.textContent = formatMins(+timeSlider.value);
+
+  function onUpdate() {
+    const mins = +timeSlider.value;
+    timeLabel.textContent = formatMins(mins);
+    highlight(+daySelect.value, mins);
+  }
+
+  const toggleBtn = document.getElementById('dbg-toggle');
+  toggleBtn.addEventListener('click', () => {
+    if (!panel.classList.contains('collapsed')) {
+      panel.style.display = 'none';
+      panel.classList.add('collapsed');
+    }
+  });
+
+  let debugMode = false;
+
+  daySelect.addEventListener('change', () => { debugMode = true; onUpdate(); });
+  timeSlider.addEventListener('input', () => { debugMode = true; onUpdate(); });
+  resetBtn.addEventListener('click', () => {
+    debugMode = false;
+    const n = new Date();
+    daySelect.value = n.getDay() || 7;
+    timeSlider.value = n.getHours() * 60 + n.getMinutes();
+    onUpdate();
+  });
+
+  // 课前提醒：思维/Polly 开始前5分钟响铃
+  let lastReminder = '';
+  function checkPreClassReminder(col, mins) {
+    for (let r = 0; r < numRows; r++) {
+      const timeCell = grid[r][0];
+      if (!timeCell) continue;
+      const match = timeCell.textContent.trim().match(/(\d{2}):(\d{2})\s*-/);
+      if (!match) continue;
+      const startMins = parseInt(match[1]) * 60 + parseInt(match[2]);
+      const diff = startMins - mins;
+      if (diff >= 4 && diff <= 6) {
+        const cell = grid[r][col];
+        if (!cell) continue;
+        const txt = cell.textContent || '';
+        if (txt.includes('思维') || txt.includes('Polly')) {
+          const key = col + '-' + startMins;
+          if (lastReminder !== key) {
+            lastReminder = key;
+            playBell();
+          }
+        }
+      }
+    }
+  }
+
+  // 每 30 秒自动检测，课程切换时自动响铃
+  setInterval(() => {
+    if (debugMode) return;
+    const n = new Date();
+    const col = n.getDay() || 7;
+    const mins = n.getHours() * 60 + n.getMinutes();
+    daySelect.value = col;
+    timeSlider.value = mins;
+    timeLabel.textContent = formatMins(mins);
+    highlight(col, mins);
+    checkPreClassReminder(col, mins);
+  }, 30000);
+
+  // iPad 保活：防止页面被挂起后定时器停止
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && !debugMode) {
+      const n = new Date();
+      const col = n.getDay() || 7;
+      const mins = n.getHours() * 60 + n.getMinutes();
+      daySelect.value = col;
+      timeSlider.value = mins;
+      timeLabel.textContent = formatMins(mins);
+      highlight(col, mins);
+    }
+  });
+})();
+
+// 点击装饰图标的全屏动画效果
+(function() {
+  let audioCtx;
+  const fxStyle = document.createElement('style');
+  fxStyle.textContent = `
+    @keyframes flap {
+      0%, 100% { transform: scaleX(1) scaleY(1); }
+      50% { transform: scaleX(0.3) scaleY(1.1); }
+    }
+    .butterfly-wrap {
+      position: absolute;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+    .butterfly-inner {
+      animation: flap 0.2s ease-in-out infinite;
+      display: inline-block;
+    }
+  `;
+  document.head.appendChild(fxStyle);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'fx-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;overflow:hidden;';
+  document.body.appendChild(overlay);
+
+  const effects = {
+    '🌈': { particles: ['🌈','🌈','🌈'], type: 'rainbow' },
+    '📚': { particles: ['📕','📗','📘','📙','📖'], type: 'fall' },
+    '🎵': { particles: ['🎵','🎶','♪','♫','🎵'], type: 'rise' },
+    '⭐': { particles: ['⭐','✨','💫','⭐','✨'], type: 'scatter' },
+    '🏀': { particles: ['🏀','🏀','🏀','🏀'], type: 'bounce' },
+    '🎨': { particles: ['🔴','🟡','🔵','🟢','🟣','🟠'], type: 'scatter' },
+    '🌻': { particles: ['🌻','🌼','🌺','🌸','🌷','💐'], type: 'grow' },
+    '🦋': { particles: ['🦋','🦋','🦋','🦋','🦋'], type: 'flutter' },
+    '🎈': { particles: ['🎈','🎈','🎈','🎈','🎈'], type: 'rise' },
+    '🐳': { particles: [], type: 'whale' },
+    '🌟': { particles: ['🌟','✨','💫','⭐','🌟','✨'], type: 'scatter' },
+    '🎹': { particles: ['🎵','🎶','🎹','♪','🎵','🎶'], type: 'rise' },
+    '🐱': { particles: [], type: 'cat' },
+    '🎯': { particles: ['🎯','💥','✨','🎯','💥'], type: 'scatter' },
+    '🌸': { particles: ['🌸','🌸','🌸','🌸','🌸','🌸'], type: 'fall' },
+    '🦄': { particles: [], type: 'unicorn' },
+    '🐎': { particles: [], type: 'unicorn' },
+    '🍭': { particles: ['🍭','🍬','🍫','🧁','🍩','🍪'], type: 'fall' },
+    '🐰': { particles: ['🐰','🥕','🐰','🥕','🐰'], type: 'bounce' },
+    '🎪': { particles: ['🎊','🎉','🎊','🎉','🎊','🎉'], type: 'scatter' },
+    '🌞': { particles: ['🌞','☀️','🌤','⭐','✨','🌞'], type: 'scatter' },
+  };
+
+  function spawnParticle(emoji, type, delay) {
+    const el = document.createElement('div');
+    el.textContent = emoji;
+    el.style.cssText = 'position:absolute;font-size:' + (30 + Math.random() * 40) + 'px;will-change:transform,opacity;pointer-events:none;';
+
+    const x = Math.random() * 100;
+    const dur = 2000 + Math.random() * 2000;
+
+    if (type === 'fall') {
+      el.style.left = x + 'vw';
+      el.style.top = '-60px';
+      el.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: 'translateY(105vh) rotate(' + (Math.random() * 360) + 'deg)', opacity: 0.6 }
+      ], { duration: dur, delay: delay, fill: 'forwards' });
+    } else if (type === 'rise') {
+      el.style.left = x + 'vw';
+      el.style.bottom = '-60px';
+      el.style.top = 'auto';
+      el.animate([
+        { transform: 'translateY(0) scale(0.5)', opacity: 0 },
+        { transform: 'translateY(-20vh) scale(1)', opacity: 1, offset: 0.2 },
+        { transform: 'translateY(-110vh) scale(1.2)', opacity: 0 }
+      ], { duration: dur, delay: delay, fill: 'forwards' });
+    } else if (type === 'scatter') {
+      el.style.left = '50vw';
+      el.style.top = '50vh';
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 40 + Math.random() * 50;
+      const tx = Math.cos(angle) * dist;
+      const ty = Math.sin(angle) * dist;
+      el.animate([
+        { transform: 'translate(0,0) scale(0)', opacity: 1 },
+        { transform: 'translate(0,0) scale(1.5)', opacity: 1, offset: 0.15 },
+        { transform: 'translate(' + tx + 'vw,' + ty + 'vh) scale(1) rotate(' + (Math.random()*360) + 'deg)', opacity: 0 }
+      ], { duration: dur, delay: delay, fill: 'forwards' });
+    } else if (type === 'bounce') {
+      el.style.left = x + 'vw';
+      el.style.top = '-60px';
+      el.animate([
+        { transform: 'translateY(0)', opacity: 1 },
+        { transform: 'translateY(70vh)', opacity: 1, offset: 0.3 },
+        { transform: 'translateY(40vh)', opacity: 1, offset: 0.5 },
+        { transform: 'translateY(70vh)', opacity: 1, offset: 0.65 },
+        { transform: 'translateY(55vh)', opacity: 1, offset: 0.8 },
+        { transform: 'translateY(70vh)', opacity: 0.5, offset: 0.9 },
+        { transform: 'translateY(70vh)', opacity: 0 }
+      ], { duration: dur, delay: delay, fill: 'forwards' });
+    } else if (type === 'flutter') {
+      el.remove();
+      const wrap = document.createElement('div');
+      wrap.className = 'butterfly-wrap';
+      const fromLeft = Math.random() > 0.5;
+      wrap.style.left = (fromLeft ? -10 : 110) + 'vw';
+      wrap.style.top = (15 + Math.random() * 60) + 'vh';
+      wrap.style.fontSize = (35 + Math.random() * 30) + 'px';
+      const inner = document.createElement('span');
+      inner.className = 'butterfly-inner';
+      inner.textContent = emoji;
+      inner.style.animationDuration = (0.15 + Math.random() * 0.15) + 's';
+      wrap.appendChild(inner);
+      const dir = fromLeft ? 1 : -1;
+      const steps = 8;
+      const keyframes = [{ transform: 'translateX(0) translateY(0) rotate(0deg)', opacity: 0 }];
+      for (let s = 1; s <= steps; s++) {
+        const pct = s / steps;
+        const tx = dir * pct * 120;
+        const ty = Math.sin(pct * Math.PI * 3) * 15 + (Math.random() - 0.5) * 10;
+        const rot = Math.sin(pct * Math.PI * 4) * 20;
+        keyframes.push({
+          transform: 'translateX(' + tx + 'vw) translateY(' + ty + 'vh) rotate(' + rot + 'deg)',
+          opacity: pct < 0.1 ? pct * 10 : pct > 0.85 ? (1 - pct) * 6.6 : 1,
+          offset: pct
+        });
+      }
+      wrap.animate(keyframes, { duration: 4000 + Math.random() * 2000, delay: delay, fill: 'forwards' });
+      overlay.appendChild(wrap);
+      const totalDur = 6500 + delay;
+      setTimeout(() => wrap.remove(), totalDur);
+      return;
+    } else if (type === 'wave') {
+      el.style.left = x + 'vw';
+      el.style.bottom = '-60px';
+      el.style.top = 'auto';
+      el.animate([
+        { transform: 'translateY(0) translateX(0)', opacity: 0 },
+        { transform: 'translateY(-30vh) translateX(10vw)', opacity: 1, offset: 0.3 },
+        { transform: 'translateY(-35vh) translateX(-5vw)', opacity: 1, offset: 0.5 },
+        { transform: 'translateY(-50vh) translateX(8vw)', opacity: 0.5, offset: 0.8 },
+        { transform: 'translateY(-70vh) translateX(0)', opacity: 0 }
+      ], { duration: dur + 500, delay: delay, fill: 'forwards' });
+    } else if (type === 'grow') {
+      el.style.left = x + 'vw';
+      el.style.top = (30 + Math.random() * 50) + 'vh';
+      el.animate([
+        { transform: 'scale(0) rotate(-30deg)', opacity: 0 },
+        { transform: 'scale(1.3) rotate(10deg)', opacity: 1, offset: 0.4 },
+        { transform: 'scale(1.5) rotate(-5deg)', opacity: 1, offset: 0.7 },
+        { transform: 'scale(1.8) rotate(0deg)', opacity: 0 }
+      ], { duration: dur + 500, delay: delay, fill: 'forwards' });
+    }
+
+    overlay.appendChild(el);
+    setTimeout(() => el.remove(), dur + delay + 500);
+  }
+
+  function showRainbow() {
+    const arc = document.createElement('div');
+    arc.style.cssText = 'position:absolute;top:50%;left:50%;width:80vmin;height:40vmin;border-radius:50% 50% 0 0;border:12vmin solid transparent;border-top-color:red;transform:translate(-50%,-80%) scale(0);opacity:0;';
+    arc.style.borderImage = 'linear-gradient(180deg, red, orange, yellow, green, blue, indigo, violet) 1';
+    arc.style.borderStyle = 'solid';
+    arc.style.borderWidth = '6vmin';
+    arc.style.borderBottom = 'none';
+    arc.style.background = 'transparent';
+    arc.style.borderImage = '';
+    arc.style.boxShadow = 'inset 0 3vmin 0 red, inset 0 6vmin 0 orange, inset 0 9vmin 0 yellow, inset 0 12vmin 0 green, 0 -3vmin 0 red, 0 -6vmin 0 orange, 0 -9vmin 0 yellow, 0 -12vmin 0 green';
+    arc.style.borderColor = 'blue';
+
+    const rainbow = document.createElement('div');
+    rainbow.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;';
+    rainbow.innerHTML = '<svg viewBox="0 0 200 100" style="width:100%;height:100%;position:absolute;top:10%;left:0;">' +
+      '<defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1">' +
+      '<stop offset="0%" stop-color="#ff0000"/>' +
+      '<stop offset="17%" stop-color="#ff8800"/>' +
+      '<stop offset="33%" stop-color="#ffdd00"/>' +
+      '<stop offset="50%" stop-color="#00cc00"/>' +
+      '<stop offset="67%" stop-color="#0088ff"/>' +
+      '<stop offset="83%" stop-color="#4400ff"/>' +
+      '<stop offset="100%" stop-color="#cc00ff"/>' +
+      '</linearGradient></defs>' +
+      '<path d="M10,95 A90,90 0 0,1 190,95" fill="none" stroke="url(#rg)" stroke-width="8" stroke-linecap="round" opacity="0.85"/>' +
+      '<path d="M20,95 A80,80 0 0,1 180,95" fill="none" stroke="url(#rg)" stroke-width="6" stroke-linecap="round" opacity="0.6"/>' +
+      '<path d="M30,95 A70,70 0 0,1 170,95" fill="none" stroke="url(#rg)" stroke-width="4" stroke-linecap="round" opacity="0.4"/>' +
+      '</svg>';
+    rainbow.animate([
+      { transform: 'scale(0) translateY(30vh)', opacity: 0 },
+      { transform: 'scale(1) translateY(0)', opacity: 1, offset: 0.3 },
+      { transform: 'scale(1.05) translateY(0)', opacity: 1, offset: 0.7 },
+      { transform: 'scale(1.1) translateY(-5vh)', opacity: 0 }
+    ], { duration: 3500, fill: 'forwards' });
+
+    overlay.appendChild(rainbow);
+    setTimeout(() => rainbow.remove(), 4000);
+
+    for (let i = 0; i < 8; i++) {
+      spawnParticle('✨', 'scatter', i * 100);
+    }
+  }
+
+  function showWhale() {
+    const whale = document.createElement('div');
+    whale.textContent = '🐳';
+    whale.style.cssText = 'position:absolute;font-size:350px;right:-400px;top:35vh;pointer-events:none;';
+    overlay.appendChild(whale);
+
+    // 鲸鱼从远处（小）游过来（大），到中间停住，喷完水后游走变小
+    whale.animate([
+      // 从右侧远处游来，由小变大，上下摆动
+      { transform: 'translateX(-10vw) translateY(0) scale(0.1) rotate(0deg)', opacity: 0.3, offset: 0 },
+      { transform: 'translateX(-15vw) translateY(-2vh) scale(0.18) rotate(2deg)', opacity: 0.4, offset: 0.05 },
+      { transform: 'translateX(-20vw) translateY(2vh) scale(0.28) rotate(-2deg)', opacity: 0.5, offset: 0.1 },
+      { transform: 'translateX(-25vw) translateY(-2vh) scale(0.4) rotate(2deg)', opacity: 0.6, offset: 0.15 },
+      { transform: 'translateX(-30vw) translateY(2vh) scale(0.55) rotate(-2deg)', opacity: 0.7, offset: 0.2 },
+      { transform: 'translateX(-35vw) translateY(-1vh) scale(0.75) rotate(1deg)', opacity: 0.85, offset: 0.25 },
+      { transform: 'translateX(-50vw) translateY(0) scale(1) rotate(0deg)', opacity: 1, offset: 0.3 },
+      // 停在屏幕中间喷水，轻微浮动
+      { transform: 'translateX(-50vw) translateY(-2vh) scale(1) rotate(1deg)', opacity: 1, offset: 0.4 },
+      { transform: 'translateX(-50vw) translateY(1vh) scale(1) rotate(-1deg)', opacity: 1, offset: 0.5 },
+      { transform: 'translateX(-50vw) translateY(-1vh) scale(1) rotate(1deg)', opacity: 1, offset: 0.6 },
+      { transform: 'translateX(-50vw) translateY(0) scale(1) rotate(0deg)', opacity: 1, offset: 0.65 },
+      // 游走向左，由大变小
+      { transform: 'translateX(-45vw) translateY(2vh) scale(0.85) rotate(-3deg)', opacity: 1, offset: 0.7 },
+      { transform: 'translateX(-55vw) translateY(-2vh) scale(0.6) rotate(3deg)', opacity: 0.8, offset: 0.75 },
+      { transform: 'translateX(-65vw) translateY(2vh) scale(0.4) rotate(-2deg)', opacity: 0.6, offset: 0.8 },
+      { transform: 'translateX(-75vw) translateY(-1vh) scale(0.25) rotate(2deg)', opacity: 0.4, offset: 0.85 },
+      { transform: 'translateX(-85vw) translateY(1vh) scale(0.15) rotate(-1deg)', opacity: 0.2, offset: 0.9 },
+      { transform: 'translateX(-95vw) translateY(0) scale(0.08) rotate(0deg)', opacity: 0, offset: 1 },
+    ], { duration: 7000, fill: 'forwards' });
+
+    // 喷水 - 鲸鱼游到中间后从头顶喷
+    function sprayFromHead(baseDelay) {
+      // 鲸鱼头在屏幕中偏左（emoji头朝左），喷水从头顶往上
+      const headX = 58;
+      const headTopY = 30;
+      for (let round = 0; round < 4; round++) {
+        setTimeout(() => {
+          for (let i = 0; i < 12; i++) {
+            const drop = document.createElement('div');
+            drop.textContent = i % 3 === 0 ? '💦' : '💧';
+            const sz = 18 + Math.random() * 25;
+            drop.style.cssText = 'position:absolute;font-size:' + sz + 'px;pointer-events:none;left:' + headX + '%;top:' + headTopY + '%;';
+
+            const spreadX = (Math.random() - 0.5) * 25;
+            const peakY = -(20 + Math.random() * 40);
+
+            drop.animate([
+              { transform: 'translate(0, 0) scale(0.2)', opacity: 0.9 },
+              { transform: 'translate(' + (spreadX * 0.4) + 'vw, ' + peakY + 'vh) scale(1.3)', opacity: 1, offset: 0.3 },
+              { transform: 'translate(' + (spreadX * 0.7) + 'vw, ' + (peakY * 0.3) + 'vh) scale(1)', opacity: 0.8, offset: 0.55 },
+              { transform: 'translate(' + spreadX + 'vw, 50vh) scale(0.4)', opacity: 0 }
+            ], { duration: 1300 + Math.random() * 700, delay: i * 35, fill: 'forwards' });
+
+            overlay.appendChild(drop);
+            setTimeout(() => drop.remove(), 2200 + i * 35);
+          }
+
+          // 水雾
+          const mist = document.createElement('div');
+          mist.textContent = '💨';
+          mist.style.cssText = 'position:absolute;font-size:40px;pointer-events:none;left:' + headX + '%;top:' + headTopY + '%;';
+          mist.animate([
+            { transform: 'translateY(0) scale(0.5)', opacity: 0.8 },
+            { transform: 'translateY(-22vh) scale(2.5)', opacity: 0 }
+          ], { duration: 700, fill: 'forwards' });
+          overlay.appendChild(mist);
+          setTimeout(() => mist.remove(), 800);
+        }, baseDelay + round * 500);
+      }
+    }
+
+    function playSplash() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const ctx = audioCtx;
+      const t = ctx.currentTime;
+      const master = ctx.createGain();
+      master.gain.setValueAtTime(0.6, t);
+      master.connect(ctx.destination);
+
+      // 喷射音：快速上升
+      const jet = ctx.createOscillator();
+      const jg = ctx.createGain();
+      jet.type = 'sawtooth';
+      jet.frequency.setValueAtTime(200, t);
+      jet.frequency.exponentialRampToValueAtTime(2000, t + 0.15);
+      jet.frequency.exponentialRampToValueAtTime(600, t + 0.4);
+      jg.gain.setValueAtTime(0.5, t);
+      jg.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
+      jet.connect(jg); jg.connect(master);
+      jet.start(t); jet.stop(t + 0.55);
+
+      // 水滴落下泡泡音
+      [2200, 1800, 1400, 1000, 800, 600].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(f, t + 0.1 + i * 0.07);
+        o.frequency.exponentialRampToValueAtTime(f * 0.3, t + 0.1 + i * 0.07 + 0.2);
+        g.gain.setValueAtTime(0.4, t + 0.1 + i * 0.07);
+        g.gain.exponentialRampToValueAtTime(0.01, t + 0.1 + i * 0.07 + 0.25);
+        o.connect(g); g.connect(master);
+        o.start(t + 0.1 + i * 0.07); o.stop(t + 0.1 + i * 0.07 + 0.3);
+      });
+
+      // 白噪声水花
+      const buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+      const data = buf.getChannelData(0);
+      for (let j = 0; j < data.length; j++) data[j] = (Math.random() * 2 - 1);
+      const noise = ctx.createBufferSource();
+      noise.buffer = buf;
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(0.4, t);
+      ng.gain.exponentialRampToValueAtTime(0.01, t + 0.6);
+      const filt = ctx.createBiquadFilter();
+      filt.type = 'highpass';
+      filt.frequency.value = 2000;
+      noise.connect(filt); filt.connect(ng); ng.connect(master);
+      noise.start(t); noise.stop(t + 0.65);
+    }
+
+    setTimeout(() => {
+      sprayFromHead(0);
+      for (let r = 0; r < 4; r++) {
+        setTimeout(() => playSplash(), r * 500);
+      }
+    }, 2100);
+
+    setTimeout(() => whale.remove(), 7500);
+  }
+
+  function showUnicorn() {
+    const unicorn = document.createElement('div');
+    unicorn.textContent = '🦄';
+    unicorn.style.cssText = 'position:absolute;font-size:300px;left:50%;top:50%;pointer-events:none;transform:translate(-50%,-50%) scale(0.03);';
+    overlay.appendChild(unicorn);
+
+    // 独角兽从远处跑来，由小变大，带有奔跑的上下颠簸
+    unicorn.animate([
+      { transform: 'translate(-50%,-50%) scale(0.03)', opacity: 0.2, offset: 0 },
+      { transform: 'translate(-50%,-55%) scale(0.06)', opacity: 0.3, offset: 0.05 },
+      { transform: 'translate(-50%,-45%) scale(0.1)', opacity: 0.4, offset: 0.1 },
+      { transform: 'translate(-50%,-55%) scale(0.15)', opacity: 0.5, offset: 0.15 },
+      { transform: 'translate(-50%,-45%) scale(0.22)', opacity: 0.55, offset: 0.2 },
+      { transform: 'translate(-50%,-55%) scale(0.3)', opacity: 0.6, offset: 0.25 },
+      { transform: 'translate(-50%,-45%) scale(0.4)', opacity: 0.7, offset: 0.3 },
+      { transform: 'translate(-50%,-55%) scale(0.52)', opacity: 0.8, offset: 0.35 },
+      { transform: 'translate(-50%,-45%) scale(0.65)', opacity: 0.85, offset: 0.4 },
+      { transform: 'translate(-50%,-55%) scale(0.78)', opacity: 0.9, offset: 0.45 },
+      { transform: 'translate(-50%,-45%) scale(0.9)', opacity: 0.95, offset: 0.5 },
+      { transform: 'translate(-50%,-55%) scale(1)', opacity: 1, offset: 0.55 },
+      // 到最近处，停一下
+      { transform: 'translate(-50%,-50%) scale(1.05)', opacity: 1, offset: 0.6 },
+      { transform: 'translate(-50%,-48%) scale(1.1)', opacity: 1, offset: 0.65 },
+      { transform: 'translate(-50%,-50%) scale(1.05)', opacity: 1, offset: 0.7 },
+      // 然后跑走，越来越大冲出屏幕
+      { transform: 'translate(-50%,-55%) scale(1.4)', opacity: 0.9, offset: 0.75 },
+      { transform: 'translate(-50%,-45%) scale(1.9)', opacity: 0.7, offset: 0.8 },
+      { transform: 'translate(-50%,-55%) scale(2.5)', opacity: 0.5, offset: 0.85 },
+      { transform: 'translate(-50%,-45%) scale(3.5)', opacity: 0.3, offset: 0.9 },
+      { transform: 'translate(-50%,-50%) scale(5)', opacity: 0, offset: 1 },
+    ], { duration: 5000, fill: 'forwards' });
+
+    // 奔跑时身后留下闪光尾巴
+    const sparkles = ['✨','💖','⭐','💜','💫','✨','💖','⭐'];
+    let sparkleTimer = setInterval(() => {
+      sparkles.forEach((s, i) => {
+        setTimeout(() => {
+          const sp = document.createElement('div');
+          sp.textContent = s;
+          sp.style.cssText = 'position:absolute;font-size:' + (16 + Math.random() * 28) + 'px;pointer-events:none;left:' + (40 + Math.random() * 20) + '%;top:' + (40 + Math.random() * 20) + '%;';
+          sp.animate([
+            { transform: 'scale(1) rotate(0deg)', opacity: 1 },
+            { transform: 'scale(0.3) rotate(' + (Math.random() * 360) + 'deg)', opacity: 0 }
+          ], { duration: 800 + Math.random() * 400, fill: 'forwards' });
+          overlay.appendChild(sp);
+          setTimeout(() => sp.remove(), 1300);
+        }, i * 60);
+      });
+    }, 400);
+
+    setTimeout(() => clearInterval(sparkleTimer), 3500);
+    setTimeout(() => unicorn.remove(), 5500);
+  }
+
+  // 🏀 篮球：弹跳进场，投篮得分
+  function showBasketball() {
+    const hoop = document.createElement('div');
+    hoop.textContent = '🏀';
+    hoop.style.cssText = 'position:absolute;font-size:25px;right:20vw;top:25vh;pointer-events:none;opacity:0;';
+    hoop.innerHTML = '<span style="font-size:50px">⭕</span>';
+    overlay.appendChild(hoop);
+    hoop.animate([
+      { opacity: 0 }, { opacity: 1, offset: 0.1 }, { opacity: 1, offset: 0.9 }, { opacity: 0 }
+    ], { duration: 4000, fill: 'forwards' });
+
+    const ball = document.createElement('div');
+    ball.textContent = '🏀';
+    ball.style.cssText = 'position:absolute;font-size:60px;left:5vw;bottom:10vh;pointer-events:none;';
+    overlay.appendChild(ball);
+    ball.animate([
+      { transform: 'translateX(0) translateY(0) rotate(0deg)', offset: 0 },
+      { transform: 'translateX(15vw) translateY(-30vh) rotate(180deg)', offset: 0.15 },
+      { transform: 'translateX(30vw) translateY(0) rotate(360deg)', offset: 0.3 },
+      { transform: 'translateX(45vw) translateY(-25vh) rotate(540deg)', offset: 0.45 },
+      { transform: 'translateX(55vw) translateY(0) rotate(720deg)', offset: 0.55 },
+      // 起跳投篮
+      { transform: 'translateX(60vw) translateY(-55vh) rotate(900deg)', offset: 0.75 },
+      // 进球！
+      { transform: 'translateX(62vw) translateY(-50vh) rotate(1080deg) scale(0.8)', offset: 0.85 },
+      { transform: 'translateX(62vw) translateY(-20vh) rotate(1200deg) scale(0.6)', opacity: 0, offset: 1 },
+    ], { duration: 3500, fill: 'forwards' });
+
+    // 进球后庆祝
+    setTimeout(() => {
+      ['🎉','⭐','🏆','✨','🎊','👏'].forEach((e, i) => {
+        const el = document.createElement('div');
+        el.textContent = e;
+        el.style.cssText = 'position:absolute;font-size:40px;pointer-events:none;right:20vw;top:25vh;';
+        const a = Math.random() * Math.PI * 2;
+        const d = 15 + Math.random() * 20;
+        el.animate([
+          { transform: 'translate(0,0) scale(0)', opacity: 1 },
+          { transform: 'translate(' + (Math.cos(a)*d) + 'vw,' + (Math.sin(a)*d) + 'vh) scale(1.3)', opacity: 0 }
+        ], { duration: 1200, delay: i * 80, fill: 'forwards' });
+        overlay.appendChild(el);
+        setTimeout(() => el.remove(), 1500);
+      });
+    }, 2800);
+    setTimeout(() => { ball.remove(); hoop.remove(); }, 4500);
+  }
+
+  // 🐰 兔子：蹦蹦跳跳捡胡萝卜
+  function showBunny() {
+    const bunny = document.createElement('div');
+    bunny.textContent = '🐰';
+    bunny.style.cssText = 'position:absolute;font-size:65px;left:-80px;top:55vh;pointer-events:none;';
+    overlay.appendChild(bunny);
+
+    const hops = 10;
+    const kf = [{ transform: 'translateX(0) translateY(0) scaleX(1)', opacity: 0 }];
+    for (let i = 1; i <= hops; i++) {
+      const p = i / hops;
+      kf.push({
+        transform: 'translateX(' + (i * 11) + 'vw) translateY(-15vh) scaleX(1)',
+        opacity: 1, offset: p - 0.04
+      });
+      kf.push({
+        transform: 'translateX(' + (i * 11) + 'vw) translateY(0) scaleX(1)',
+        opacity: i === hops ? 0 : 1, offset: p
+      });
+    }
+    bunny.animate(kf, { duration: 5000, fill: 'forwards' });
+
+    // 地上放胡萝卜
+    [15, 35, 55, 75].forEach((x, i) => {
+      const carrot = document.createElement('div');
+      carrot.textContent = '🥕';
+      carrot.style.cssText = 'position:absolute;font-size:35px;pointer-events:none;left:' + x + 'vw;top:60vh;opacity:0;';
+      overlay.appendChild(carrot);
+      carrot.animate([
+        { opacity: 0, transform: 'scale(0)' },
+        { opacity: 1, transform: 'scale(1)', offset: 0.1 },
+        { opacity: 1, transform: 'scale(1)', offset: 0.8 },
+        { opacity: 0, transform: 'scale(0) translateY(-10vh)' }
+      ], { duration: 2000, delay: i * 600 + 200, fill: 'forwards' });
+      // 被吃掉时冒出爱心
+      setTimeout(() => {
+        const heart = document.createElement('div');
+        heart.textContent = '❤️';
+        heart.style.cssText = 'position:absolute;font-size:25px;pointer-events:none;left:' + x + 'vw;top:55vh;';
+        heart.animate([
+          { transform: 'translateY(0) scale(0)', opacity: 1 },
+          { transform: 'translateY(-10vh) scale(1.5)', opacity: 0 }
+        ], { duration: 800, fill: 'forwards' });
+        overlay.appendChild(heart);
+        setTimeout(() => heart.remove(), 900);
+      }, i * 600 + 1500);
+      setTimeout(() => carrot.remove(), i * 600 + 2300);
+    });
+    setTimeout(() => bunny.remove(), 5500);
+  }
+
+  // 🎈 气球：飘上去，一个爆炸
+  function showBalloon() {
+    const colors = ['🎈','🟥','🟦','🟩','🟨','🟪'];
+    const balloons = [];
+    for (let i = 0; i < 8; i++) {
+      const b = document.createElement('div');
+      b.textContent = '🎈';
+      b.style.cssText = 'position:absolute;font-size:' + (40 + Math.random() * 30) + 'px;pointer-events:none;left:' + (10 + Math.random() * 80) + 'vw;bottom:-60px;';
+      const sway = (Math.random() - 0.5) * 20;
+      b.animate([
+        { transform: 'translateY(0) translateX(0) rotate(0deg)', opacity: 0 },
+        { transform: 'translateY(-20vh) translateX(' + (sway*0.3) + 'vw) rotate(5deg)', opacity: 1, offset: 0.1 },
+        { transform: 'translateY(-45vh) translateX(' + (sway*0.6) + 'vw) rotate(-5deg)', opacity: 1, offset: 0.4 },
+        { transform: 'translateY(-70vh) translateX(' + (sway*0.8) + 'vw) rotate(3deg)', opacity: 1, offset: 0.7 },
+        { transform: 'translateY(-110vh) translateX(' + sway + 'vw) rotate(-3deg)', opacity: 0.5 }
+      ], { duration: 3500 + Math.random() * 1500, delay: i * 200, fill: 'forwards' });
+      overlay.appendChild(b);
+      balloons.push(b);
+    }
+    // 一个气球爆炸
+    setTimeout(() => {
+      const pop = document.createElement('div');
+      pop.textContent = '💥';
+      pop.style.cssText = 'position:absolute;font-size:80px;pointer-events:none;left:50vw;top:30vh;';
+      pop.animate([
+        { transform: 'scale(0)', opacity: 1 },
+        { transform: 'scale(2)', opacity: 1, offset: 0.3 },
+        { transform: 'scale(2.5)', opacity: 0 }
+      ], { duration: 600, fill: 'forwards' });
+      overlay.appendChild(pop);
+      // 爆炸出彩纸
+      for (let j = 0; j < 15; j++) {
+        const conf = document.createElement('div');
+        conf.textContent = ['🎊','✨','⭐','🎉','💫'][j % 5];
+        conf.style.cssText = 'position:absolute;font-size:22px;pointer-events:none;left:50vw;top:30vh;';
+        const a = Math.random() * Math.PI * 2;
+        const d = 10 + Math.random() * 25;
+        conf.animate([
+          { transform: 'translate(0,0) scale(0)', opacity: 1 },
+          { transform: 'translate(' + (Math.cos(a)*d) + 'vw,' + (Math.sin(a)*d) + 'vh) scale(1)', opacity: 1, offset: 0.4 },
+          { transform: 'translate(' + (Math.cos(a)*d*1.3) + 'vw,' + (Math.sin(a)*d+30) + 'vh) scale(0.5)', opacity: 0 }
+        ], { duration: 1500, fill: 'forwards' });
+        overlay.appendChild(conf);
+        setTimeout(() => conf.remove(), 1600);
+      }
+      setTimeout(() => pop.remove(), 700);
+    }, 2000);
+    setTimeout(() => balloons.forEach(b => b.remove()), 5500);
+  }
+
+  // 🌸 樱花：花瓣从天空飘落，带风
+  function showSakura() {
+    for (let i = 0; i < 30; i++) {
+      const p = document.createElement('div');
+      p.textContent = i % 4 === 0 ? '🌸' : '🩷';
+      p.style.cssText = 'position:absolute;font-size:' + (15 + Math.random() * 25) + 'px;pointer-events:none;left:' + (Math.random() * 100) + 'vw;top:-30px;opacity:0;';
+      const windX = 10 + Math.random() * 30;
+      const dur = 3000 + Math.random() * 3000;
+      p.animate([
+        { transform: 'translateY(0) translateX(0) rotate(0deg)', opacity: 0 },
+        { transform: 'translateY(15vh) translateX(' + (windX*0.2) + 'vw) rotate(90deg)', opacity: 0.9, offset: 0.15 },
+        { transform: 'translateY(30vh) translateX(' + (windX*0.1) + 'vw) rotate(180deg)', opacity: 0.8, offset: 0.3 },
+        { transform: 'translateY(50vh) translateX(' + (windX*0.4) + 'vw) rotate(270deg)', opacity: 0.7, offset: 0.55 },
+        { transform: 'translateY(70vh) translateX(' + (windX*0.2) + 'vw) rotate(360deg)', opacity: 0.5, offset: 0.75 },
+        { transform: 'translateY(105vh) translateX(' + windX + 'vw) rotate(450deg)', opacity: 0 }
+      ], { duration: dur, delay: i * 150, fill: 'forwards' });
+      overlay.appendChild(p);
+      setTimeout(() => p.remove(), dur + i * 150 + 200);
+    }
+  }
+
+  // 🎪 马戏团：彩带炮
+  function showCircus() {
+    // 中间炮筒
+    const cannon = document.createElement('div');
+    cannon.textContent = '🎪';
+    cannon.style.cssText = 'position:absolute;font-size:80px;pointer-events:none;left:50%;top:50%;transform:translate(-50%,-50%) scale(0);';
+    overlay.appendChild(cannon);
+    cannon.animate([
+      { transform: 'translate(-50%,-50%) scale(0) rotate(-10deg)' },
+      { transform: 'translate(-50%,-50%) scale(1.5) rotate(5deg)', offset: 0.2 },
+      { transform: 'translate(-50%,-50%) scale(1.3) rotate(-3deg)', offset: 0.3 },
+      { transform: 'translate(-50%,-50%) scale(1.3) rotate(0deg)', offset: 0.5 },
+      { transform: 'translate(-50%,-50%) scale(0)', opacity: 0 }
+    ], { duration: 2500, fill: 'forwards' });
+
+    // 爆发彩带
+    setTimeout(() => {
+      const items = ['🎊','🎉','🎊','🎉','✨','⭐','🎈','🎀','🎊','🎉','💫','🌟','🎊','🎉','🎈','🎀','✨','⭐','🎊','🎉','💫','🌟','🎀','🎈'];
+      items.forEach((e, i) => {
+        const el = document.createElement('div');
+        el.textContent = e;
+        el.style.cssText = 'position:absolute;font-size:' + (20 + Math.random() * 25) + 'px;pointer-events:none;left:50%;top:50%;';
+        const angle = (i / items.length) * Math.PI * 2;
+        const dist = 25 + Math.random() * 35;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        el.animate([
+          { transform: 'translate(-50%,-50%) scale(0) rotate(0deg)', opacity: 1 },
+          { transform: 'translate(calc(-50% + ' + (tx*0.5) + 'vw), calc(-50% + ' + (ty*0.5) + 'vh)) scale(1.5) rotate(180deg)', opacity: 1, offset: 0.3 },
+          { transform: 'translate(calc(-50% + ' + tx + 'vw), calc(-50% + ' + (ty+15) + 'vh)) scale(0.8) rotate(360deg)', opacity: 0 }
+        ], { duration: 1800 + Math.random() * 500, fill: 'forwards' });
+        overlay.appendChild(el);
+        setTimeout(() => el.remove(), 2500);
+      });
+    }, 500);
+    setTimeout(() => cannon.remove(), 3000);
+  }
+
+  // 🎯 靶心：弓箭射中靶心
+  function showTarget() {
+    const target = document.createElement('div');
+    target.textContent = '🎯';
+    target.style.cssText = 'position:absolute;font-size:100px;pointer-events:none;right:25vw;top:40vh;opacity:0;';
+    overlay.appendChild(target);
+    target.animate([
+      { opacity: 0, transform: 'scale(0)' },
+      { opacity: 1, transform: 'scale(1)', offset: 0.15 },
+      { opacity: 1, transform: 'scale(1)', offset: 0.9 },
+      { opacity: 0, transform: 'scale(0.8)' }
+    ], { duration: 3500, fill: 'forwards' });
+
+    // 弓箭飞过来
+    setTimeout(() => {
+      const arrow = document.createElement('div');
+      arrow.textContent = '🏹';
+      arrow.style.cssText = 'position:absolute;font-size:50px;pointer-events:none;left:-50px;top:42vh;';
+      overlay.appendChild(arrow);
+      arrow.animate([
+        { transform: 'translateX(0) rotate(0deg)', opacity: 1 },
+        { transform: 'translateX(72vw) rotate(0deg)', opacity: 1, offset: 0.7 },
+        { transform: 'translateX(72vw) rotate(0deg) scale(0.8)', opacity: 1, offset: 0.75 },
+        { transform: 'translateX(72vw) rotate(0deg) scale(0.8)', opacity: 0 }
+      ], { duration: 1200, fill: 'forwards' });
+
+      // 命中火花
+      setTimeout(() => {
+        ['💥','✨','⭐','💫','🔥'].forEach((e, i) => {
+          const sp = document.createElement('div');
+          sp.textContent = e;
+          sp.style.cssText = 'position:absolute;font-size:35px;pointer-events:none;right:27vw;top:42vh;';
+          const a = Math.random() * Math.PI * 2;
+          sp.animate([
+            { transform: 'translate(0,0) scale(0)', opacity: 1 },
+            { transform: 'translate(' + (Math.cos(a)*12) + 'vw,' + (Math.sin(a)*12) + 'vh) scale(1.2)', opacity: 0 }
+          ], { duration: 800, delay: i * 50, fill: 'forwards' });
+          overlay.appendChild(sp);
+          setTimeout(() => sp.remove(), 1000);
+        });
+      }, 840);
+      setTimeout(() => arrow.remove(), 1500);
+    }, 600);
+    setTimeout(() => target.remove(), 4000);
+  }
+
+  // 🌞 太阳：日出，光芒四射
+  function showSun() {
+    const sun = document.createElement('div');
+    sun.textContent = '🌞';
+    sun.style.cssText = 'position:absolute;font-size:120px;pointer-events:none;left:50%;bottom:-130px;transform:translateX(-50%);';
+    overlay.appendChild(sun);
+    sun.animate([
+      { transform: 'translateX(-50%) translateY(0) scale(0.5)', opacity: 0.3 },
+      { transform: 'translateX(-50%) translateY(-35vh) scale(1)', opacity: 1, offset: 0.4 },
+      { transform: 'translateX(-50%) translateY(-38vh) scale(1.05)', opacity: 1, offset: 0.6 },
+      { transform: 'translateX(-50%) translateY(-35vh) scale(1)', opacity: 1, offset: 0.8 },
+      { transform: 'translateX(-50%) translateY(-35vh) scale(1.2)', opacity: 0 }
+    ], { duration: 4000, fill: 'forwards' });
+
+    // 光线放射
+    setTimeout(() => {
+      for (let i = 0; i < 12; i++) {
+        const ray = document.createElement('div');
+        ray.textContent = '✨';
+        ray.style.cssText = 'position:absolute;font-size:30px;pointer-events:none;left:50%;bottom:35vh;';
+        const angle = (i / 12) * Math.PI * 2;
+        const dist = 20 + Math.random() * 15;
+        ray.animate([
+          { transform: 'translate(-50%,0) scale(0)', opacity: 1 },
+          { transform: 'translate(calc(-50% + ' + (Math.cos(angle)*dist) + 'vw), ' + (Math.sin(angle)*dist) + 'vh) scale(1.5)', opacity: 1, offset: 0.5 },
+          { transform: 'translate(calc(-50% + ' + (Math.cos(angle)*dist*1.5) + 'vw), ' + (Math.sin(angle)*dist*1.5) + 'vh) scale(0.5)', opacity: 0 }
+        ], { duration: 1500, fill: 'forwards' });
+        overlay.appendChild(ray);
+        setTimeout(() => ray.remove(), 1600);
+      }
+    }, 1600);
+    setTimeout(() => sun.remove(), 4500);
+  }
+
+  // ⭐🌟 流星划过
+  function showStar() {
+    for (let i = 0; i < 5; i++) {
+      setTimeout(() => {
+        const startX = window.innerWidth + 40;
+        const startY = (5 + Math.random() * 25) / 100 * window.innerHeight;
+        const endX = -(0.6 + Math.random() * 0.4) * window.innerWidth;
+        const endY = (0.4 + Math.random() * 0.3) * window.innerHeight;
+        const dur = 1800 + Math.random() * 600;
+        const size = 35 + Math.random() * 25;
+
+        const star = document.createElement('div');
+        star.textContent = i % 2 === 0 ? '⭐' : '🌟';
+        star.style.cssText = 'position:absolute;font-size:' + size + 'px;pointer-events:none;left:' + startX + 'px;top:' + startY + 'px;';
+        overlay.appendChild(star);
+        star.animate([
+          { transform: 'translate(0,0) scale(0.3)', opacity: 0 },
+          { transform: 'translate(' + (endX * 0.08) + 'px,' + (endY * 0.08) + 'px) scale(1)', opacity: 1, offset: 0.08 },
+          { transform: 'translate(' + (endX * 0.85) + 'px,' + (endY * 0.85) + 'px) scale(1)', opacity: 1, offset: 0.85 },
+          { transform: 'translate(' + endX + 'px,' + endY + 'px) scale(0.2)', opacity: 0 }
+        ], { duration: dur, fill: 'forwards' });
+
+        // 真正的拖尾：沿路径持续产生渐隐光点
+        const trailCount = 25;
+        const trails = ['⭐','🌟','⭐','🌟'];
+        for (let j = 0; j < trailCount; j++) {
+          const p = (j + 1) / trailCount;
+          const delay = dur * p * 0.85;
+          const tx = endX * p * 0.85;
+          const ty = endY * p * 0.85;
+          setTimeout(() => {
+            const dot = document.createElement('div');
+            dot.textContent = trails[j % trails.length];
+            dot.style.cssText = 'position:absolute;pointer-events:none;left:' + startX + 'px;top:' + startY + 'px;font-size:' + (8 + Math.random() * 16) + 'px;transform:translate(' + tx + 'px,' + ty + 'px);';
+            overlay.appendChild(dot);
+            dot.animate([
+              { opacity: 0.9, transform: 'translate(' + tx + 'px,' + ty + 'px) scale(1)' },
+              { opacity: 0, transform: 'translate(' + (tx + (Math.random()-0.5)*20) + 'px,' + (ty + 8 + Math.random()*15) + 'px) scale(0.2)' }
+            ], { duration: 600 + Math.random() * 400, fill: 'forwards' });
+            setTimeout(() => dot.remove(), 1100);
+          }, delay);
+        }
+        setTimeout(() => star.remove(), dur + 200);
+      }, i * 500);
+    }
+  }
+
+  // 🎨 调色盘：颜料泼洒
+  function showPaint() {
+    const colors = ['🔴','🟠','🟡','🟢','🔵','🟣'];
+    const splats = ['●','●','●','◆','●'];
+    colors.forEach((c, i) => {
+      setTimeout(() => {
+        // 颜料从调色盘飞出
+        const blob = document.createElement('div');
+        blob.textContent = c;
+        blob.style.cssText = 'position:absolute;font-size:60px;pointer-events:none;left:50%;top:50%;';
+        const angle = (i / colors.length) * Math.PI * 2 - Math.PI / 2;
+        const dist = 25 + Math.random() * 15;
+        const tx = Math.cos(angle) * dist;
+        const ty = Math.sin(angle) * dist;
+        blob.animate([
+          { transform: 'translate(-50%,-50%) scale(0)', opacity: 1 },
+          { transform: 'translate(calc(-50% + ' + tx + 'vw), calc(-50% + ' + ty + 'vh)) scale(1.5)', opacity: 1, offset: 0.4 },
+          // 啪！溅开
+          { transform: 'translate(calc(-50% + ' + tx + 'vw), calc(-50% + ' + ty + 'vh)) scale(2.5)', opacity: 0.3, offset: 0.6 },
+          { transform: 'translate(calc(-50% + ' + tx + 'vw), calc(-50% + ' + ty + 'vh)) scale(3)', opacity: 0 }
+        ], { duration: 1200, fill: 'forwards' });
+        overlay.appendChild(blob);
+        // 小溅点
+        for (let j = 0; j < 5; j++) {
+          const sp = document.createElement('div');
+          sp.textContent = c;
+          sp.style.cssText = 'position:absolute;font-size:' + (15 + Math.random()*15) + 'px;pointer-events:none;left:calc(50% + ' + tx + 'vw);top:calc(50% + ' + ty + 'vh);';
+          const sa = Math.random() * Math.PI * 2;
+          sp.animate([
+            { transform: 'translate(0,0) scale(0)', opacity: 1 },
+            { transform: 'translate(' + (Math.cos(sa)*8) + 'vw,' + (Math.sin(sa)*8) + 'vh) scale(1)', opacity: 0 }
+          ], { duration: 600, delay: 400, fill: 'forwards' });
+          overlay.appendChild(sp);
+          setTimeout(() => sp.remove(), 1200);
+        }
+        setTimeout(() => blob.remove(), 1400);
+      }, i * 250);
+    });
+    // 最后出现调色盘
+    setTimeout(() => {
+      const palette = document.createElement('div');
+      palette.textContent = '🎨';
+      palette.style.cssText = 'position:absolute;font-size:80px;pointer-events:none;left:50%;top:50%;transform:translate(-50%,-50%);';
+      palette.animate([
+        { transform: 'translate(-50%,-50%) scale(0) rotate(-30deg)', opacity: 0 },
+        { transform: 'translate(-50%,-50%) scale(1.5) rotate(10deg)', opacity: 1, offset: 0.4 },
+        { transform: 'translate(-50%,-50%) scale(1.3) rotate(0deg)', opacity: 1, offset: 0.7 },
+        { transform: 'translate(-50%,-50%) scale(0) rotate(30deg)', opacity: 0 }
+      ], { duration: 1500, fill: 'forwards' });
+      overlay.appendChild(palette);
+      setTimeout(() => palette.remove(), 1600);
+    }, 1500);
+  }
+
+  // 🌻 向日葵：从地面长出来
+  function showSunflower() {
+    const allFlowers = ['🌻','🌼','🌺','🌷','🌹','🌻','🌼','🌺','🌷','🌹','🌻','🌼','🌺','🌷','🌹','🌻','🌼','🌺','🌷','🌹'];
+    const total = allFlowers.length;
+    const els = [];
+    for (let i = 0; i < total; i++) {
+      const x = 2 + Math.random() * 96;
+      const h = 15 + Math.random() * 35;
+      const sway = (Math.random() - 0.5) * 3;
+      const delay = Math.random() * 800;
+
+      const stem = document.createElement('div');
+      stem.style.cssText = 'position:absolute;pointer-events:none;left:' + x + 'vw;bottom:0;width:3px;background:linear-gradient(to top,#1a6b1a,#2ecc40);border-radius:2px;height:0;transform-origin:bottom;';
+      overlay.appendChild(stem);
+      stem.animate([
+        { height: '0vh', transform: 'rotate(0deg)' },
+        { height: h + 'vh', transform: 'rotate(' + sway + 'deg)' }
+      ], { duration: 1000 + Math.random() * 600, delay: delay, fill: 'forwards' });
+
+      // 叶子
+      if (Math.random() > 0.4) {
+        const leaf = document.createElement('div');
+        leaf.textContent = '🌿';
+        const leafH = 3 + Math.random() * (h * 0.4);
+        leaf.style.cssText = 'position:absolute;font-size:' + (12 + Math.random() * 10) + 'px;pointer-events:none;left:' + (x + (Math.random()>0.5?0.8:-1.5)) + 'vw;bottom:' + leafH + 'vh;opacity:0;';
+        overlay.appendChild(leaf);
+        leaf.animate([
+          { opacity: 0, transform: 'scale(0)' },
+          { opacity: 0.8, transform: 'scale(1)', offset: 0.3 },
+          { opacity: 0.8, transform: 'scale(1)', offset: 0.8 },
+          { opacity: 0, transform: 'scale(0)' }
+        ], { duration: 3500, delay: delay + 600, fill: 'forwards' });
+        els.push(leaf);
+      }
+
+      const flower = document.createElement('div');
+      flower.textContent = allFlowers[i];
+      flower.style.cssText = 'position:absolute;font-size:' + (28 + Math.random() * 20) + 'px;pointer-events:none;left:' + (x - 0.8) + 'vw;bottom:' + h + 'vh;opacity:0;';
+      overlay.appendChild(flower);
+      flower.animate([
+        { transform: 'scale(0) rotate(-20deg)', opacity: 0 },
+        { transform: 'scale(1.2) rotate(8deg)', opacity: 1, offset: 0.4 },
+        { transform: 'scale(1) rotate(-3deg)', opacity: 1, offset: 0.6 },
+        { transform: 'scale(1.05) rotate(' + sway + 'deg)', opacity: 1, offset: 0.85 },
+        { transform: 'scale(0) rotate(0deg)', opacity: 0 }
+      ], { duration: 3500, delay: delay + 800, fill: 'forwards' });
+
+      els.push(stem, flower);
+    }
+    setTimeout(() => els.forEach(e => e.remove()), 5500);
+  }
+
+  // 📚 书本：飞过来叠成一摞，最上面翻开
+  function showBooks() {
+    const books = ['📕','📗','📘','📙','📓'];
+    books.forEach((b, i) => {
+      const book = document.createElement('div');
+      book.textContent = b;
+      book.style.cssText = 'position:absolute;font-size:50px;pointer-events:none;';
+      const fromLeft = i % 2 === 0;
+      book.style.left = fromLeft ? '-60px' : '';
+      book.style.right = fromLeft ? '' : '-60px';
+      book.style.top = (20 + Math.random() * 40) + 'vh';
+      overlay.appendChild(book);
+      const targetX = fromLeft ? '48vw' : '-48vw';
+      book.animate([
+        { transform: 'translateX(0) translateY(0) rotate(' + (Math.random()*360) + 'deg)', opacity: 0 },
+        { transform: 'translateX(' + targetX + ') translateY(' + (30 - i * 3) + 'vh) rotate(0deg)', opacity: 1, offset: 0.6 },
+        { transform: 'translateX(' + targetX + ') translateY(' + (30 - i * 3) + 'vh) rotate(0deg)', opacity: 1, offset: 0.85 },
+        { transform: 'translateX(' + targetX + ') translateY(' + (30 - i * 3) + 'vh) rotate(0deg)', opacity: 0 }
+      ], { duration: 2500, delay: i * 300, fill: 'forwards' });
+      setTimeout(() => book.remove(), 2800 + i * 300);
+    });
+    // 最后一本翻开
+    setTimeout(() => {
+      const open = document.createElement('div');
+      open.textContent = '📖';
+      open.style.cssText = 'position:absolute;font-size:70px;pointer-events:none;left:50%;top:35vh;transform:translate(-50%,0);';
+      overlay.appendChild(open);
+      open.animate([
+        { transform: 'translate(-50%,0) scale(0)', opacity: 0 },
+        { transform: 'translate(-50%,0) scale(1.5)', opacity: 1, offset: 0.3 },
+        { transform: 'translate(-50%,0) scale(1.3)', opacity: 1, offset: 0.7 },
+        { transform: 'translate(-50%,0) scale(0)', opacity: 0 }
+      ], { duration: 2000, fill: 'forwards' });
+      // 字飞出来
+      ['A','B','C','你','好','棒'].forEach((c, i) => {
+        const ch = document.createElement('div');
+        ch.textContent = c;
+        ch.style.cssText = 'position:absolute;font-size:28px;font-weight:bold;color:hsl(' + (i*60) + ',80%,50%);pointer-events:none;left:50%;top:38vh;';
+        const a = -Math.PI/2 + (Math.random()-0.5) * Math.PI;
+        const d = 15 + Math.random() * 15;
+        ch.animate([
+          { transform: 'translate(-50%,0) scale(0)', opacity: 0 },
+          { transform: 'translate(calc(-50% + ' + (Math.cos(a)*d) + 'vw),' + (Math.sin(a)*d) + 'vh) scale(1.2)', opacity: 1, offset: 0.4 },
+          { transform: 'translate(calc(-50% + ' + (Math.cos(a)*d*1.3) + 'vw),' + (Math.sin(a)*d*1.3) + 'vh) scale(0.8)', opacity: 0 }
+        ], { duration: 1500, delay: i * 100 + 300, fill: 'forwards' });
+        overlay.appendChild(ch);
+        setTimeout(() => ch.remove(), 2000 + i * 100);
+      });
+      setTimeout(() => open.remove(), 2200);
+    }, 2000);
+  }
+
+  // 🍭 糖果雨：天上掉各种糖果
+  function showCandy() {
+    const candies = ['🍭','🍬','🍫','🧁','🍩','🍪','🍰','🎂','🍡','🍦'];
+    for (let i = 0; i < 25; i++) {
+      const c = document.createElement('div');
+      c.textContent = candies[Math.floor(Math.random() * candies.length)];
+      c.style.cssText = 'position:absolute;font-size:' + (25 + Math.random() * 25) + 'px;pointer-events:none;left:' + (Math.random() * 100) + 'vw;top:-40px;';
+      const rot = Math.random() * 720 - 360;
+      const sway = (Math.random() - 0.5) * 15;
+      c.animate([
+        { transform: 'translateY(0) translateX(0) rotate(0deg)', opacity: 0 },
+        { transform: 'translateY(10vh) translateX(' + (sway*0.3) + 'vw) rotate(' + (rot*0.2) + 'deg)', opacity: 1, offset: 0.1 },
+        { transform: 'translateY(50vh) translateX(' + (sway*0.7) + 'vw) rotate(' + (rot*0.6) + 'deg)', opacity: 1, offset: 0.5 },
+        { transform: 'translateY(105vh) translateX(' + sway + 'vw) rotate(' + rot + 'deg)', opacity: 0.7 }
+      ], { duration: 2000 + Math.random() * 2000, delay: i * 120, fill: 'forwards' });
+      overlay.appendChild(c);
+      setTimeout(() => c.remove(), 4500 + i * 120);
+    }
+  }
+
+  // 🎵 音符：音符跳舞，组成旋律
+  function showMusic() {
+    const notes = ['🎵','🎶','♪','♫','🎵','🎶','♪','♫'];
+    // 音符从底部跳出来跳舞
+    notes.forEach((n, i) => {
+      const note = document.createElement('div');
+      note.textContent = n;
+      note.style.cssText = 'position:absolute;font-size:' + (30 + Math.random() * 25) + 'px;pointer-events:none;left:' + (10 + i * 10) + 'vw;bottom:-40px;';
+      overlay.appendChild(note);
+      const wobble = (Math.random() - 0.5) * 10;
+      note.animate([
+        { transform: 'translateY(0) rotate(0deg) scale(0)', opacity: 0 },
+        { transform: 'translateY(-30vh) rotate(-15deg) scale(1)', opacity: 1, offset: 0.15 },
+        { transform: 'translateY(-25vh) rotate(15deg) scale(1.1) translateX(' + wobble + 'vw)', opacity: 1, offset: 0.3 },
+        { transform: 'translateY(-35vh) rotate(-10deg) scale(0.9) translateX(' + (-wobble) + 'vw)', opacity: 1, offset: 0.45 },
+        { transform: 'translateY(-30vh) rotate(10deg) scale(1.2) translateX(' + (wobble*0.5) + 'vw)', opacity: 1, offset: 0.6 },
+        { transform: 'translateY(-40vh) rotate(-5deg) scale(1) translateX(' + (-wobble*0.5) + 'vw)', opacity: 1, offset: 0.75 },
+        { transform: 'translateY(-60vh) rotate(0deg) scale(0.5)', opacity: 0 }
+      ], { duration: 3000, delay: i * 200, fill: 'forwards' });
+      setTimeout(() => note.remove(), 3500 + i * 200);
+    });
+    // 中间大音符
+    setTimeout(() => {
+      const big = document.createElement('div');
+      big.textContent = '🎼';
+      big.style.cssText = 'position:absolute;font-size:80px;pointer-events:none;left:50%;top:40%;transform:translate(-50%,-50%);';
+      big.animate([
+        { transform: 'translate(-50%,-50%) scale(0) rotate(-20deg)', opacity: 0 },
+        { transform: 'translate(-50%,-50%) scale(1.5) rotate(5deg)', opacity: 1, offset: 0.3 },
+        { transform: 'translate(-50%,-50%) scale(1.3) rotate(-3deg)', opacity: 1, offset: 0.7 },
+        { transform: 'translate(-50%,-50%) scale(0) rotate(10deg)', opacity: 0 }
+      ], { duration: 1500, fill: 'forwards' });
+      overlay.appendChild(big);
+      setTimeout(() => big.remove(), 1600);
+    }, 1200);
+  }
+
+  // 🎹 钢琴：琴键弹起来配音符
+  function showPiano() {
+    // 琴键出现在底部
+    const keys = ['⬜','⬛','⬜','⬛','⬜','⬜','⬛','⬜'];
+    keys.forEach((k, i) => {
+      const key = document.createElement('div');
+      key.textContent = k;
+      key.style.cssText = 'position:absolute;font-size:40px;pointer-events:none;left:' + (20 + i * 7) + 'vw;bottom:5vh;opacity:0;line-height:1;';
+      overlay.appendChild(key);
+      key.animate([
+        { transform: 'translateY(20vh)', opacity: 0 },
+        { transform: 'translateY(0)', opacity: 1, offset: 0.15 },
+        // 被按下弹起
+        { transform: 'translateY(0)', opacity: 1, offset: 0.3 + i * 0.06 },
+        { transform: 'translateY(1vh) scale(0.95)', opacity: 1, offset: 0.33 + i * 0.06 },
+        { transform: 'translateY(0) scale(1)', opacity: 1, offset: 0.36 + i * 0.06 },
+        { transform: 'translateY(0)', opacity: 1, offset: 0.85 },
+        { transform: 'translateY(20vh)', opacity: 0 }
+      ], { duration: 4000, fill: 'forwards' });
+      // 弹起时飞出音符
+      setTimeout(() => {
+        const note = document.createElement('div');
+        note.textContent = ['🎵','🎶','♪','♫'][i % 4];
+        note.style.cssText = 'position:absolute;font-size:30px;pointer-events:none;left:' + (22 + i * 7) + 'vw;bottom:12vh;';
+        note.animate([
+          { transform: 'translateY(0) scale(0.5)', opacity: 0 },
+          { transform: 'translateY(-15vh) scale(1.2)', opacity: 1, offset: 0.3 },
+          { transform: 'translateY(-40vh) translateX(' + ((Math.random()-0.5)*10) + 'vw) scale(0.8)', opacity: 0 }
+        ], { duration: 1500, fill: 'forwards' });
+        overlay.appendChild(note);
+        setTimeout(() => note.remove(), 1600);
+      }, 1200 + i * 240);
+      setTimeout(() => key.remove(), 4200);
+    });
+  }
+
+  function showCat() {
+    // 猫咪从左边走进来
+    const cat = document.createElement('div');
+    cat.textContent = '🐱';
+    cat.style.cssText = 'position:absolute;font-size:70px;left:-80px;top:60vh;pointer-events:none;';
+    overlay.appendChild(cat);
+
+    // 猫走到中间，边走边留爪印
+    cat.animate([
+      { transform: 'translateX(0) translateY(0) scaleX(1)', opacity: 0, offset: 0 },
+      { transform: 'translateX(5vw) translateY(-2vh) scaleX(1)', opacity: 1, offset: 0.05 },
+      { transform: 'translateX(10vw) translateY(0) scaleX(1)', opacity: 1, offset: 0.1 },
+      { transform: 'translateX(15vw) translateY(-2vh) scaleX(1)', opacity: 1, offset: 0.15 },
+      { transform: 'translateX(20vw) translateY(0) scaleX(1)', opacity: 1, offset: 0.2 },
+      { transform: 'translateX(25vw) translateY(-1vh) scaleX(1)', opacity: 1, offset: 0.25 },
+      { transform: 'translateX(30vw) translateY(0) scaleX(1)', opacity: 1, offset: 0.3 },
+      // 到中间停住，看到毛线球
+      { transform: 'translateX(35vw) translateY(0) scaleX(1)', opacity: 1, offset: 0.35 },
+      { transform: 'translateX(35vw) translateY(-1vh) scaleX(1)', opacity: 1, offset: 0.4 },
+      // 扑向毛线球
+      { transform: 'translateX(38vw) translateY(-8vh) scaleX(1)', opacity: 1, offset: 0.45 },
+      { transform: 'translateX(42vw) translateY(0) scaleX(1)', opacity: 1, offset: 0.5 },
+      // 玩一下
+      { transform: 'translateX(42vw) translateY(-2vh) scaleX(1) rotate(-10deg)', opacity: 1, offset: 0.55 },
+      { transform: 'translateX(43vw) translateY(1vh) scaleX(1) rotate(10deg)', opacity: 1, offset: 0.6 },
+      // 发现老鼠！转头
+      { transform: 'translateX(43vw) translateY(-3vh) scaleX(1)', opacity: 1, offset: 0.65 },
+      // 追老鼠，加速跑！
+      { transform: 'translateX(50vw) translateY(0) scaleX(1)', opacity: 1, offset: 0.7 },
+      { transform: 'translateX(60vw) translateY(-3vh) scaleX(1)', opacity: 1, offset: 0.75 },
+      { transform: 'translateX(72vw) translateY(0) scaleX(1)', opacity: 1, offset: 0.8 },
+      { transform: 'translateX(85vw) translateY(-2vh) scaleX(1)', opacity: 1, offset: 0.85 },
+      { transform: 'translateX(100vw) translateY(0) scaleX(1)', opacity: 1, offset: 0.9 },
+      { transform: 'translateX(115vw) translateY(0) scaleX(1)', opacity: 0, offset: 1 },
+    ], { duration: 6000, fill: 'forwards' });
+
+    // 爪印
+    const pawPositions = [5, 10, 15, 20, 25, 30];
+    pawPositions.forEach((x, i) => {
+      setTimeout(() => {
+        const paw = document.createElement('div');
+        paw.textContent = '🐾';
+        paw.style.cssText = 'position:absolute;font-size:28px;pointer-events:none;left:' + x + 'vw;top:65vh;';
+        paw.animate([
+          { transform: 'scale(0) rotate(' + (Math.random() * 30 - 15) + 'deg)', opacity: 0 },
+          { transform: 'scale(1.2) rotate(' + (Math.random() * 30 - 15) + 'deg)', opacity: 0.8, offset: 0.3 },
+          { transform: 'scale(1) rotate(' + (Math.random() * 30 - 15) + 'deg)', opacity: 0.6, offset: 0.7 },
+          { transform: 'scale(0.8)', opacity: 0 }
+        ], { duration: 3000, fill: 'forwards' });
+        overlay.appendChild(paw);
+        setTimeout(() => paw.remove(), 3500);
+      }, i * 300 + 300);
+    });
+
+    // 毛线球出现在中间
+    const yarn = document.createElement('div');
+    yarn.textContent = '🧶';
+    yarn.style.cssText = 'position:absolute;font-size:45px;pointer-events:none;left:42vw;top:60vh;opacity:0;';
+    overlay.appendChild(yarn);
+    setTimeout(() => {
+      yarn.animate([
+        { transform: 'scale(0) rotate(0deg)', opacity: 0 },
+        { transform: 'scale(1) rotate(0deg)', opacity: 1, offset: 0.2 },
+        { transform: 'scale(1) rotate(0deg)', opacity: 1, offset: 0.4 },
+        // 被猫扑到后滚走
+        { transform: 'translateX(5vw) rotate(180deg) scale(0.8)', opacity: 0.8, offset: 0.6 },
+        { transform: 'translateX(10vw) rotate(360deg) scale(0.5)', opacity: 0.4, offset: 0.8 },
+        { transform: 'translateX(15vw) rotate(540deg) scale(0.2)', opacity: 0 }
+      ], { duration: 3000, fill: 'forwards' });
+    }, 1800);
+    setTimeout(() => yarn.remove(), 5000);
+
+    // 老鼠从右边出现跑过
+    const mouse = document.createElement('div');
+    mouse.textContent = '🐭';
+    mouse.style.cssText = 'position:absolute;font-size:45px;pointer-events:none;right:-50px;top:61vh;';
+    overlay.appendChild(mouse);
+    setTimeout(() => {
+      mouse.animate([
+        { transform: 'translateX(0) translateY(0) scaleX(-1)', opacity: 0 },
+        { transform: 'translateX(-15vw) translateY(-1vh) scaleX(-1)', opacity: 1, offset: 0.1 },
+        { transform: 'translateX(-25vw) translateY(1vh) scaleX(-1)', opacity: 1, offset: 0.2 },
+        // 被猫发现，加速逃跑！
+        { transform: 'translateX(-40vw) translateY(-2vh) scaleX(-1)', opacity: 1, offset: 0.4 },
+        { transform: 'translateX(-55vw) translateY(1vh) scaleX(-1)', opacity: 1, offset: 0.55 },
+        { transform: 'translateX(-70vw) translateY(-1vh) scaleX(-1)', opacity: 1, offset: 0.7 },
+        { transform: 'translateX(-85vw) translateY(0) scaleX(-1)', opacity: 1, offset: 0.85 },
+        { transform: 'translateX(-110vw) translateY(0) scaleX(-1)', opacity: 0 },
+      ], { duration: 3500, fill: 'forwards' });
+    }, 3200);
+    setTimeout(() => mouse.remove(), 7000);
+
+    // 追跑时扬起灰尘
+    setTimeout(() => {
+      for (let i = 0; i < 8; i++) {
+        setTimeout(() => {
+          const dust = document.createElement('div');
+          dust.textContent = '💨';
+          dust.style.cssText = 'position:absolute;font-size:' + (20 + Math.random() * 15) + 'px;pointer-events:none;left:' + (45 + i * 6) + 'vw;top:63vh;';
+          dust.animate([
+            { transform: 'scale(0.5)', opacity: 0.7 },
+            { transform: 'scale(1.5) translateY(-3vh)', opacity: 0 }
+          ], { duration: 600, fill: 'forwards' });
+          overlay.appendChild(dust);
+          setTimeout(() => dust.remove(), 700);
+        }, i * 120);
+      }
+    }, 3800);
+
+    setTimeout(() => cat.remove(), 6500);
+  }
+
+  function triggerEffect(emoji) {
+    const cfg = effects[emoji];
+    if (!cfg) return;
+
+    if (emoji === '🌈') {
+      showRainbow();
+      return;
+    }
+    if (emoji === '🐳') {
+      showWhale();
+      return;
+    }
+    if (emoji === '🦄' || emoji === '🐎') {
+      showUnicorn();
+      return;
+    }
+    if (emoji === '🐱') {
+      showCat();
+      return;
+    }
+    if (emoji === '🏀') {
+      showBasketball();
+      return;
+    }
+    if (emoji === '🐰') {
+      showBunny();
+      return;
+    }
+    if (emoji === '🎈') {
+      showBalloon();
+      return;
+    }
+    if (emoji === '🌸') {
+      showSakura();
+      return;
+    }
+    if (emoji === '🎪') {
+      showCircus();
+      return;
+    }
+    if (emoji === '🎯') {
+      showTarget();
+      return;
+    }
+    if (emoji === '🌞') {
+      showSun();
+      return;
+    }
+    if (emoji === '⭐' || emoji === '🌟') {
+      showStar();
+      return;
+    }
+    if (emoji === '🎨') {
+      showPaint();
+      return;
+    }
+    if (emoji === '🌻') {
+      showSunflower();
+      return;
+    }
+    if (emoji === '📚') {
+      showBooks();
+      return;
+    }
+    if (emoji === '🍭') {
+      showCandy();
+      return;
+    }
+    if (emoji === '🎹') {
+      showPiano();
+      return;
+    }
+    if (emoji === '🎵') {
+      showMusic();
+      return;
+    }
+
+    const count = 15 + Math.floor(Math.random() * 10);
+    for (let i = 0; i < count; i++) {
+      const p = cfg.particles[Math.floor(Math.random() * cfg.particles.length)];
+      spawnParticle(p, cfg.type, i * 80);
+    }
+  }
+
+  // 音效系统
+  const soundMap = {
+    '🌈': 'chime',
+    '📚': 'fall',
+    '🎵': 'melody',
+    '⭐': 'sparkle',
+    '🏀': 'bounce',
+    '🎨': 'splash',
+    '🌻': 'grow',
+    '🦋': 'flutter',
+    '🎈': 'rise',
+    '🐳': 'whale',
+    '🌟': 'sparkle',
+    '🎹': 'music',
+    '🐱': 'meow',
+    '🎯': 'hit',
+    '🌸': 'fall',
+    '🦄': 'chime',
+    '🍭': 'pop',
+    '🐰': 'bounce',
+    '🎪': 'fanfare',
+    '🌞': 'sparkle',
+  };
+
+  let clickSoundNodes = null;
+  function stopClickSound() {
+    if (!clickSoundNodes) return;
+    const { oscs, master, ctx } = clickSoundNodes;
+    const t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(master.gain.value, t);
+    master.gain.linearRampToValueAtTime(0, t + 0.15);
+    oscs.forEach(o => { try { o.stop(t + 0.2); } catch(e){} });
+    clickSoundNodes = null;
+  }
+  window._stopClickSound = stopClickSound;
+
+  function playSound(type) {
+    stopClickSound();
+    if (window._stopBell) window._stopBell();
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    const t = ctx.currentTime;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.25, t);
+    master.connect(ctx.destination);
+    const oscs = [];
+    const _createOsc = ctx.createOscillator.bind(ctx);
+    ctx.createOscillator = function() { const o = _createOsc(); oscs.push(o); return o; };
+
+    if (type === 'melody') {
+      // 小星星 🎵
+      const notes = [
+        523, 523, 784, 784, 880, 880, 784, 0,
+        698, 698, 659, 659, 587, 587, 523, 0,
+        784, 784, 698, 698, 659, 659, 587, 0,
+        784, 784, 698, 698, 659, 659, 587, 0,
+        523, 523, 784, 784, 880, 880, 784, 0,
+        698, 698, 659, 659, 587, 587, 523,
+      ];
+      const beat = 0.4;
+      notes.forEach((f, i) => {
+        if (f === 0) return;
+        const offset = t + i * beat;
+        [1, 2, 3].forEach(r => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = 'sine';
+          o.frequency.setValueAtTime(f * r, offset);
+          g.gain.setValueAtTime((r === 1 ? 0.35 : 0.08 / r), offset);
+          g.gain.exponentialRampToValueAtTime(0.01, offset + beat * 0.9);
+          o.connect(g); g.connect(master);
+          o.start(offset); o.stop(offset + beat);
+        });
+      });
+    } else if (type === 'sparkle') {
+      [1200, 1600, 2000, 2400].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(f, t + i * 0.08);
+        g.gain.setValueAtTime(0.3, t + i * 0.08);
+        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.08 + 0.3);
+        o.connect(g); g.connect(master);
+        o.start(t + i * 0.08); o.stop(t + i * 0.08 + 0.35);
+      });
+    } else if (type === 'chime') {
+      [523, 659, 784, 1047, 1319].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(f, t + i * 0.12);
+        g.gain.setValueAtTime(0.3, t + i * 0.12);
+        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.12 + 0.5);
+        o.connect(g); g.connect(master);
+        o.start(t + i * 0.12); o.stop(t + i * 0.12 + 0.55);
+      });
+    } else if (type === 'bounce') {
+      [300, 500, 400, 600, 350].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(f, t + i * 0.1);
+        o.frequency.exponentialRampToValueAtTime(f * 0.5, t + i * 0.1 + 0.15);
+        g.gain.setValueAtTime(0.4, t + i * 0.1);
+        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.1 + 0.2);
+        o.connect(g); g.connect(master);
+        o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.25);
+      });
+    } else if (type === 'music') {
+      [523, 587, 659, 784, 880].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(f, t + i * 0.15);
+        [1, 2, 3].forEach(r => {
+          const h = ctx.createOscillator();
+          const hg = ctx.createGain();
+          h.type = 'sine';
+          h.frequency.setValueAtTime(f * r, t + i * 0.15);
+          hg.gain.setValueAtTime(0.1 / r, t + i * 0.15);
+          hg.gain.exponentialRampToValueAtTime(0.01, t + i * 0.15 + 0.4);
+          h.connect(hg); hg.connect(master);
+          h.start(t + i * 0.15); h.stop(t + i * 0.15 + 0.45);
+        });
+        g.gain.setValueAtTime(0.25, t + i * 0.15);
+        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.15 + 0.4);
+        o.connect(g); g.connect(master);
+        o.start(t + i * 0.15); o.stop(t + i * 0.15 + 0.45);
+      });
+    } else if (type === 'fall') {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(800, t);
+      o.frequency.exponentialRampToValueAtTime(200, t + 0.8);
+      g.gain.setValueAtTime(0.3, t);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 0.8);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 0.85);
+    } else if (type === 'rise') {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(200, t);
+      o.frequency.exponentialRampToValueAtTime(1200, t + 0.8);
+      g.gain.setValueAtTime(0.2, t);
+      g.gain.linearRampToValueAtTime(0.35, t + 0.4);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 0.8);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 0.85);
+    } else if (type === 'splash') {
+      [400, 600, 800, 500, 700].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(f, t + i * 0.05);
+        o.frequency.exponentialRampToValueAtTime(f * 0.3, t + i * 0.05 + 0.2);
+        g.gain.setValueAtTime(0.15, t + i * 0.05);
+        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.05 + 0.25);
+        o.connect(g); g.connect(master);
+        o.start(t + i * 0.05); o.stop(t + i * 0.05 + 0.3);
+      });
+    } else if (type === 'flutter') {
+      for (let i = 0; i < 8; i++) {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(800 + Math.sin(i) * 300, t + i * 0.07);
+        g.gain.setValueAtTime(0.15, t + i * 0.07);
+        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.07 + 0.12);
+        o.connect(g); g.connect(master);
+        o.start(t + i * 0.07); o.stop(t + i * 0.07 + 0.15);
+      }
+    } else if (type === 'whale') {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(150, t);
+      o.frequency.linearRampToValueAtTime(400, t + 0.5);
+      o.frequency.linearRampToValueAtTime(120, t + 1.2);
+      g.gain.setValueAtTime(0.3, t);
+      g.gain.linearRampToValueAtTime(0.35, t + 0.5);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 1.5);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 1.6);
+    } else if (type === 'meow') {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(500, t);
+      o.frequency.linearRampToValueAtTime(900, t + 0.15);
+      o.frequency.linearRampToValueAtTime(700, t + 0.4);
+      o.frequency.linearRampToValueAtTime(400, t + 0.6);
+      g.gain.setValueAtTime(0.3, t);
+      g.gain.linearRampToValueAtTime(0.35, t + 0.15);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 0.65);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 0.7);
+    } else if (type === 'hit') {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'square';
+      o.frequency.setValueAtTime(600, t);
+      o.frequency.exponentialRampToValueAtTime(1200, t + 0.05);
+      g.gain.setValueAtTime(0.3, t);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 0.25);
+    } else if (type === 'pop') {
+      [500, 700, 900].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.setValueAtTime(f, t + i * 0.1);
+        o.frequency.exponentialRampToValueAtTime(f * 1.5, t + i * 0.1 + 0.05);
+        g.gain.setValueAtTime(0.3, t + i * 0.1);
+        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.1 + 0.15);
+        o.connect(g); g.connect(master);
+        o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.2);
+      });
+    } else if (type === 'grow') {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = 'sine';
+      o.frequency.setValueAtTime(300, t);
+      o.frequency.exponentialRampToValueAtTime(800, t + 0.6);
+      g.gain.setValueAtTime(0.1, t);
+      g.gain.linearRampToValueAtTime(0.3, t + 0.4);
+      g.gain.exponentialRampToValueAtTime(0.01, t + 0.8);
+      o.connect(g); g.connect(master);
+      o.start(t); o.stop(t + 0.85);
+    } else if (type === 'fanfare') {
+      [523, 659, 784, 1047].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'triangle';
+        o.frequency.setValueAtTime(f, t + i * 0.1);
+        g.gain.setValueAtTime(0.3, t + i * 0.1);
+        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.1 + 0.4);
+        o.connect(g); g.connect(master);
+        o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.45);
+      });
+    }
+    ctx.createOscillator = _createOsc;
+    clickSoundNodes = { oscs, master, ctx };
+  }
+
+  function handleClick(span) {
+    span.style.cursor = 'pointer';
+    span.style.userSelect = 'none';
+    span.addEventListener('click', (e) => {
+      e.stopPropagation();
+      span.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.6) rotate(15deg)' },
+        { transform: 'scale(1)' }
+      ], { duration: 400 });
+      const emoji = span.textContent.trim();
+      const sType = soundMap[emoji];
+      if (sType) playSound(sType);
+      triggerEffect(emoji);
+    });
+  }
+
+  document.querySelectorAll('.deco-side span').forEach(handleClick);
+  document.querySelectorAll('.corner-deco').forEach(handleClick);
+})();
+</script>
+</body>
+</html>
