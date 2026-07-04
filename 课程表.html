@@ -341,25 +341,14 @@
       padding: 6px;
     }
     body::before, body::after { display: none; }
-    .deco-left, .deco-right {
-      position: static;
-      width: auto;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      font-size: 32px;
-      gap: 8px;
-      padding: 0;
+    .deco-side {
+      width: 28px;
+      font-size: 22px;
+      gap: 10px;
     }
-    .page-wrapper {
-      display: flex;
-      flex-direction: column;
-    }
-    .page-wrapper .deco-left,
-    .page-wrapper .deco-right {
-      order: -1;
-      margin-bottom: 4px;
-    }
+    .deco-left { left: 0; padding-top: 60px; }
+    .deco-right { right: 0; padding-top: 80px; }
+    .page-wrapper { padding: 0 30px; }
     .corner-deco { font-size: 28px; }
     .corner-deco.tl { top: -8px; left: -8px; }
     .corner-deco.tr { top: -8px; right: -8px; }
