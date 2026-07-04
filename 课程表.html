@@ -808,8 +808,13 @@
     silentGain.connect(audioCtx.destination);
     src.start();
   }
-  document.addEventListener('click', () => startKeepAlive(), { once: true });
-  document.addEventListener('touchstart', () => startKeepAlive(), { once: true });
+  function unlockAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    startKeepAlive();
+  }
+  document.addEventListener('click', unlockAudio, { once: true });
+  document.addEventListener('touchstart', unlockAudio, { once: true });
 
   // 初始高亮
   const now = new Date();
@@ -1255,6 +1260,7 @@
 
     function playSplash() {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
       const ctx = audioCtx;
       const t = ctx.currentTime;
       const master = ctx.createGain();
@@ -2188,6 +2194,7 @@
     stopClickSound();
     if (window._stopBell) window._stopBell();
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     const ctx = audioCtx;
     const t = ctx.currentTime;
     const master = ctx.createGain();
