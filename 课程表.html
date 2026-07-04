@@ -341,7 +341,25 @@
       padding: 6px;
     }
     body::before, body::after { display: none; }
-    .deco-left, .deco-right { display: none; }
+    .deco-left, .deco-right {
+      position: static;
+      width: auto;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-size: 32px;
+      gap: 8px;
+      padding: 0;
+    }
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+    .page-wrapper .deco-left,
+    .page-wrapper .deco-right {
+      order: -1;
+      margin-bottom: 4px;
+    }
     .corner-deco { font-size: 28px; }
     .corner-deco.tl { top: -8px; left: -8px; }
     .corner-deco.tr { top: -8px; right: -8px; }
