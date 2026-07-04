@@ -2401,26 +2401,41 @@
         o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.25);
       });
     } else if (type === 'music') {
-      [523, 587, 659, 784, 880].forEach((f, i) => {
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = 'sine';
-        o.frequency.setValueAtTime(f, t + i * 0.15);
+      // 巴赫 G大调小步舞曲 BWV Anh.114
+      const b = 0.32;
+      const notes = [
+        // 第1-2小节: sol sol la si do' | do' re mi re
+        {f:392,s:0},{f:392,s:b},{f:440,s:b*2},{f:494,s:b*3},{f:523,s:b*4,d:b*1.2},
+        {f:523,s:b*6},{f:587,s:b*7},{f:330,s:b*8},{f:587,s:b*9},
+        // 第3-4小节: do si la si sol | la sol fa# mi re
+        {f:523,s:b*10},{f:494,s:b*11},{f:440,s:b*12},{f:494,s:b*13},{f:392,s:b*14,d:b*1.2},
+        {f:440,s:b*16},{f:392,s:b*17},{f:370,s:b*18},{f:330,s:b*19},{f:294,s:b*20,d:b*1.5},
+        // 第5-6小节: sol sol la si do' | do' re mi re
+        {f:392,s:b*22},{f:392,s:b*23},{f:440,s:b*24},{f:494,s:b*25},{f:523,s:b*26,d:b*1.2},
+        {f:523,s:b*28},{f:587,s:b*29},{f:330,s:b*30},{f:587,s:b*31},
+        // 第7-8小节: do si la si sol | la si la sol fa# sol —
+        {f:523,s:b*32},{f:494,s:b*33},{f:440,s:b*34},{f:494,s:b*35},{f:392,s:b*36,d:b*1.2},
+        {f:440,s:b*38},{f:494,s:b*39},{f:440,s:b*40},{f:392,s:b*41},{f:370,s:b*42},{f:392,s:b*43,d:b*2},
+      ];
+      const dur = b * 46;
+      notes.forEach(n => {
+        const len = n.d || b * 0.85;
+        const offset = t + n.s;
         [1, 2, 3].forEach(r => {
-          const h = ctx.createOscillator();
-          const hg = ctx.createGain();
-          h.type = 'sine';
-          h.frequency.setValueAtTime(f * r, t + i * 0.15);
-          hg.gain.setValueAtTime(0.1 / r, t + i * 0.15);
-          hg.gain.exponentialRampToValueAtTime(0.01, t + i * 0.15 + 0.4);
-          h.connect(hg); hg.connect(master);
-          h.start(t + i * 0.15); h.stop(t + i * 0.15 + 0.45);
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = 'sine';
+          o.frequency.setValueAtTime(n.f * r, offset);
+          g.gain.setValueAtTime((r === 1 ? 0.3 : 0.06 / r), offset);
+          g.gain.exponentialRampToValueAtTime(0.01, offset + len);
+          o.connect(g); g.connect(master);
+          o.start(offset); o.stop(offset + len + 0.05);
         });
-        g.gain.setValueAtTime(0.25, t + i * 0.15);
-        g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.15 + 0.4);
-        o.connect(g); g.connect(master);
-        o.start(t + i * 0.15); o.stop(t + i * 0.15 + 0.45);
       });
+      clickSoundNodes = { oscs, master, ctx };
+      setTimeout(() => { if (clickSoundNodes && clickSoundNodes.oscs === oscs) clickSoundNodes = null; }, dur * 1000);
+      ctx.createOscillator = _createOsc;
+      return;
     } else if (type === 'fall') {
       const o = ctx.createOscillator();
       const g = ctx.createGain();
