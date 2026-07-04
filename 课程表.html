@@ -911,6 +911,8 @@
   timeLabel.textContent = formatMins(+timeSlider.value);
 
   function onUpdate() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     const mins = +timeSlider.value;
     timeLabel.textContent = formatMins(mins);
     highlight(+daySelect.value, mins);
