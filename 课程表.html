@@ -999,15 +999,19 @@
 
   // 全屏切换 — 只能通过调试面板按钮退出
   const fsBtn = document.getElementById('dbg-fullscreen');
-  let fsLock = false; // true = 用户想保持全屏
-  let fsByBtn = false; // true = 由按钮触发的退出
+  let fsLock = false;
+  let fsByBtn = false;
+
+  function isFs() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+  function enterFs() {
+    const el = document.documentElement;
+    return (el.requestFullscreen || el.webkitRequestFullscreen).call(el);
+  }
 
   fsBtn.addEventListener('click', () => {
-    const doc = document.documentElement;
-    const isFs = document.fullscreenElement || document.webkitFullscreenElement;
-    if (!isFs) {
+    if (!isFs()) {
       fsLock = true;
-      (doc.requestFullscreen || doc.webkitRequestFullscreen).call(doc);
+      enterFs();
       fsBtn.textContent = '📺 退出全屏';
     } else {
       fsLock = false;
@@ -1017,18 +1021,38 @@
     }
   });
 
+  // 拦截 Escape 键，阻止浏览器退出全屏
+  document.addEventListener('keydown', (e) => {
+    if (fsLock && e.key === 'Escape') {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }, true);
+
+  // 拦截屏幕顶部下滑手势（触发浏览器工具栏）
+  document.addEventListener('touchstart', (e) => {
+    if (!fsLock) return;
+    const t = e.touches[0];
+    if (t && t.clientY < 30) e.preventDefault();
+  }, { passive: false, capture: true });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!fsLock) return;
+    const t = e.touches[0];
+    if (t && t.clientY < 50) e.preventDefault();
+  }, { passive: false, capture: true });
+
+  // 如果被强制退出，自动重新进入全屏
   function onFsChange() {
-    const isFs = document.fullscreenElement || document.webkitFullscreenElement;
-    if (!isFs && fsLock) {
-      if (fsByBtn) { fsByBtn = false; return; }
+    if (!isFs() && fsLock) {
+      if (fsByBtn) { fsByBtn = false; fsLock = false; fsBtn.textContent = '📺 全屏模式'; return; }
       setTimeout(() => {
-        const doc = document.documentElement;
-        (doc.requestFullscreen || doc.webkitRequestFullscreen).call(doc).catch(() => { fsLock = false; fsBtn.textContent = '📺 全屏模式'; });
-      }, 100);
+        enterFs().catch(() => { fsLock = false; fsBtn.textContent = '📺 全屏模式'; });
+      }, 50);
       return;
     }
-    fsBtn.textContent = isFs ? '📺 退出全屏' : '📺 全屏模式';
-    if (!isFs) fsLock = false;
+    fsBtn.textContent = isFs() ? '📺 退出全屏' : '📺 全屏模式';
+    if (!isFs()) fsLock = false;
   }
   document.addEventListener('fullscreenchange', onFsChange);
   document.addEventListener('webkitfullscreenchange', onFsChange);
