@@ -330,6 +330,10 @@
 
   /* 响应式 - 手机 */
   @media (max-width: 768px) {
+    table { table-layout: auto; border-spacing: 1px; }
+    col.time-col { width: auto; }
+    th:first-child { min-width: auto; }
+    .time-cell { white-space: nowrap; }
     body {
       overflow: auto;
       height: auto;
