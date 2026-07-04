@@ -84,11 +84,11 @@
     display: block;
     animation: bounce 3s ease-in-out infinite;
   }
-  .deco-left { left: 0; }
+  .deco-left { left: -120px; }
   .deco-left span:nth-child(2n) { animation-delay: 0.5s; }
   .deco-left span:nth-child(3n) { animation-delay: 1s; }
   .deco-left span:nth-child(4n) { animation-delay: 1.5s; }
-  .deco-right { right: 0; }
+  .deco-right { right: -120px; }
   .deco-right span:nth-child(2n) { animation-delay: 0.7s; }
   .deco-right span:nth-child(3n) { animation-delay: 1.2s; }
 
@@ -329,8 +329,8 @@
     col.time-col { width: auto; }
     th:first-child { min-width: auto; }
     .deco-side { width: 40px; font-size: 32px; gap: 20px; }
-    .deco-left { left: 0; padding-top: 70px; }
-    .deco-right { right: 0; padding-top: 90px; }
+    .deco-left { left: -44px; padding-top: 70px; }
+    .deco-right { right: -44px; padding-top: 90px; }
     .page-wrapper { padding: 0 44px; }
     .container { padding: 12px; }
     h1 { font-size: 24px; }
@@ -358,8 +358,8 @@
       font-size: 22px;
       gap: 10px;
     }
-    .deco-left { left: 0; padding-top: 60px; }
-    .deco-right { right: 0; padding-top: 80px; }
+    .deco-left { left: -30px; padding-top: 60px; }
+    .deco-right { right: -30px; padding-top: 80px; }
     .page-wrapper { padding: 0 30px; }
     .corner-deco { font-size: 28px; }
     .corner-deco.tl { top: -8px; left: -8px; }
@@ -997,24 +997,41 @@
     }
   });
 
-  // 全屏切换
+  // 全屏切换 — 只能通过调试面板按钮退出
   const fsBtn = document.getElementById('dbg-fullscreen');
+  let fsLock = false; // true = 用户想保持全屏
+  let fsByBtn = false; // true = 由按钮触发的退出
+
   fsBtn.addEventListener('click', () => {
     const doc = document.documentElement;
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!isFs) {
+      fsLock = true;
       (doc.requestFullscreen || doc.webkitRequestFullscreen).call(doc);
       fsBtn.textContent = '📺 退出全屏';
     } else {
+      fsLock = false;
+      fsByBtn = true;
       (document.exitFullscreen || document.webkitExitFullscreen).call(document);
       fsBtn.textContent = '📺 全屏模式';
     }
   });
-  document.addEventListener('fullscreenchange', () => {
-    fsBtn.textContent = (document.fullscreenElement || document.webkitFullscreenElement) ? '📺 退出全屏' : '📺 全屏模式';
-  });
-  document.addEventListener('webkitfullscreenchange', () => {
-    fsBtn.textContent = (document.fullscreenElement || document.webkitFullscreenElement) ? '📺 退出全屏' : '📺 全屏模式';
-  });
+
+  function onFsChange() {
+    const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!isFs && fsLock) {
+      if (fsByBtn) { fsByBtn = false; return; }
+      setTimeout(() => {
+        const doc = document.documentElement;
+        (doc.requestFullscreen || doc.webkitRequestFullscreen).call(doc).catch(() => { fsLock = false; fsBtn.textContent = '📺 全屏模式'; });
+      }, 100);
+      return;
+    }
+    fsBtn.textContent = isFs ? '📺 退出全屏' : '📺 全屏模式';
+    if (!isFs) fsLock = false;
+  }
+  document.addEventListener('fullscreenchange', onFsChange);
+  document.addEventListener('webkitfullscreenchange', onFsChange);
 
   let debugMode = false;
 
