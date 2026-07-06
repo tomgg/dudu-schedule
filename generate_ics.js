@@ -72,8 +72,7 @@ function uid() {
   return Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2) + '@dudu';
 }
 
-// 重要课程加提前5分钟提醒
-const importantClasses = ['Polly英语','火花思维','钢琴课','篮球课','美术课','伴鱼','绘本','练琴','跳绳'];
+// 所有课程提前3分钟提醒
 
 let ics = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -92,7 +91,6 @@ END:VTIMEZONE
 `;
 
 for (const [, ev] of eventMap) {
-  const isImportant = importantClasses.some(c => ev.name.includes(c));
   // 用第一个出现的天作为 DTSTART
   const firstDay = ev.days[0];
   const dtstart = toICSTime(firstDay, ev.start);
@@ -115,14 +113,12 @@ RRULE:FREQ=WEEKLY;BYDAY=${byDay}
 SUMMARY:${emoji} ${ev.name}
 `;
 
-  if (isImportant) {
-    ics += `BEGIN:VALARM
-TRIGGER:-PT5M
+  ics += `BEGIN:VALARM
+TRIGGER:-PT3M
 ACTION:DISPLAY
-DESCRIPTION:${ev.name} 还有5分钟开始！
+DESCRIPTION:${ev.name} 还有3分钟开始！
 END:VALARM
 `;
-  }
 
   ics += `END:VEVENT
 `;
@@ -131,7 +127,7 @@ END:VALARM
 ics += `END:VCALENDAR
 `;
 
-fs.writeFileSync('/Users/yunyi/Documents/DUDU/DUDU课程表.ics', ics, 'utf8');
+fs.writeFileSync('/Users/yunyi/Documents/DUDU/dudu课程表.ics', ics, 'utf8');
 console.log('Done! Events:', eventMap.size);
 
 // 打印合并后的课程概览
