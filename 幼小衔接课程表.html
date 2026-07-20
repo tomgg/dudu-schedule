@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="幼小衔接">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>章梓淇 幼小衔接课程表</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 40%, #a8edea 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    padding: 10px 20px;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  body::before {
+    content: "\2601\FE0F";
+    position: fixed;
+    top: 60px;
+    left: 30px;
+    font-size: 60px;
+    opacity: 0.5;
+    animation: float 6s ease-in-out infinite;
+  }
+  body::after {
+    content: "\2601\FE0F";
+    position: fixed;
+    top: 30px;
+    right: 80px;
+    font-size: 80px;
+    opacity: 0.4;
+    animation: float 8s ease-in-out infinite 1s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .page-wrapper {
+    position: relative;
+    max-width: 1500px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0 120px;
+  }
+
+  .deco-side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 56px;
+    overflow: hidden;
+  }
+  .deco-side span {
+    display: block;
+    animation: bounce 3s ease-in-out infinite;
+  }
+  .deco-left { left: -120px; }
+  .deco-left span:nth-child(2n) { animation-delay: 0.5s; }
+  .deco-left span:nth-child(3n) { animation-delay: 1s; }
+  .deco-left span:nth-child(4n) { animation-delay: 1.5s; }
+  .deco-right { right: -120px; }
+  .deco-right span:nth-child(2n) { animation-delay: 0.7s; }
+  .deco-right span:nth-child(3n) { animation-delay: 1.2s; }
+
+  .container {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1), 0 0 0 4px rgba(255,255,255,0.6);
+    padding: 20px;
+    width: 100%;
+    flex: 1;
+    position: relative;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .corner-deco {
+    position: absolute;
+    font-size: 56px;
+    z-index: 2;
+  }
+  .corner-deco.tl { top: -15px; left: -15px; animation: wiggle 3s ease-in-out infinite; }
+  .corner-deco.tr { top: -15px; right: -15px; animation: wiggle 3s ease-in-out infinite 0.5s; }
+  .corner-deco.bl { bottom: -15px; left: -15px; animation: wiggle 3s ease-in-out infinite 1s; }
+  .corner-deco.br { bottom: -15px; right: -15px; animation: wiggle 3s ease-in-out infinite 1.5s; }
+
+  .marquee-wrap {
+    overflow: hidden;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #f093fb, #f5576c, #ffecd2, #43e97b, #4facfe, #f093fb);
+    background-size: 300% 100%;
+    animation: marquee-bg 6s linear infinite;
+    padding: 6px 0;
+    margin-bottom: 8px;
+  }
+  .marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee-scroll 18s linear infinite;
+    width: max-content;
+  }
+  .marquee-track span {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    letter-spacing: 2px;
+    padding: 0 8px;
+  }
+  @keyframes marquee-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  @keyframes marquee-bg {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+
+  .title-area { text-align: center; margin-bottom: 10px; }
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f5576c, #ff9a9e, #4facfe, #43e97b);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 4s ease infinite;
+    display: inline-block;
+    letter-spacing: 2px;
+  }
+  .title-icons {
+    font-size: 24px;
+    margin-bottom: 2px;
+    letter-spacing: 6px;
+  }
+  .subtitle {
+    color: #999;
+    font-size: 12px;
+    margin-top: 2px;
+    font-weight: 600;
+  }
+
+  table { width: 100%; border-collapse: separate; border-spacing: 1px; table-layout: fixed; flex: 1; }
+  col.time-col { width: 12%; }
+  col.day-col { width: 12.57%; }
+  th {
+    background: linear-gradient(135deg, #f5576c, #ff6b6b);
+    color: #fff; padding: 2px 2px; font-size: clamp(10px, 1.4vw, 19px);
+    font-weight: 700; border-radius: 8px; text-align: center;
+    letter-spacing: 1px;
+  }
+  th:first-child {
+    background: linear-gradient(135deg, #4a5568, #2d3748);
+    min-width: 100px;
+  }
+  td {
+    text-align: center; padding: 1px 0; font-size: clamp(10px, 1.4vw, 18px); letter-spacing: -0.5px;
+    border-radius: 6px; vertical-align: middle;
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+  td:not(.time-cell):not(.empty):hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    z-index: 1;
+    position: relative;
+  }
+  .time-cell {
+    background: #f7fafc; color: #4a5568; font-weight: 700;
+    font-size: clamp(9px, 1.3vw, 19px); white-space: nowrap;
+    letter-spacing: -1px; word-spacing: -3px;
+  }
+  .empty { background: #f9fafb; color: #d1d5db; }
+
+  /* 学科类 - 红橙色系 */
+  .pinyin   { background: linear-gradient(135deg, #e53e3e, #c53030); color: #fff; font-weight: 600; }
+  .literacy { background: linear-gradient(135deg, #dd6b20, #c05621); color: #fff; font-weight: 600; }
+  .math     { background: linear-gradient(135deg, #d69e2e, #b7791f); color: #fff; font-weight: 600; }
+  .writing  { background: linear-gradient(135deg, #e53e3e, #dd6b20); color: #fff; font-weight: 600; }
+  .reading  { background: linear-gradient(135deg, #319795, #2c7a7b); color: #fff; font-weight: 600; }
+
+  /* 英文类 - 蓝色系 */
+  .eng-polly   { background: linear-gradient(135deg, #2b6cb0, #2c5282); color: #fff; font-weight: 600; }
+  .eng-reading { background: linear-gradient(135deg, #4299e1, #3182ce); color: #fff; font-weight: 500; }
+  .eng-cartoon { background: linear-gradient(135deg, #63b3ed, #4299e1); color: #fff; font-weight: 500; }
+
+  /* 思维类 - 紫色系 */
+  .think { background: linear-gradient(135deg, #805ad5, #6b46c1); color: #fff; font-weight: 600; }
+
+  /* 运动类 - 绿色系 */
+  .sport     { background: linear-gradient(135deg, #38a169, #276749); color: #fff; font-weight: 600; }
+  .sport-out { background: linear-gradient(135deg, #48bb78, #38a169); color: #fff; font-weight: 600; }
+  .free      { background: linear-gradient(135deg, #68d391, #48bb78); color: #fff; font-weight: 500; }
+
+  /* 艺术类 - 粉色系 */
+  .art-piano { background: linear-gradient(135deg, #d53f8c, #b83280); color: #fff; font-weight: 600; }
+  .art-draw  { background: linear-gradient(135deg, #ed64a6, #d53f8c); color: #fff; font-weight: 600; }
+
+  /* 其他 */
+  .dinner { background: linear-gradient(135deg, #f6ad55, #ed8936); color: #fff; font-weight: 500; }
+  .rest   { background: linear-gradient(135deg, #e2e8f0, #cbd5e0); color: #718096; font-weight: 500; }
+
+  td .ico { font-size: clamp(13px, 2.2vw, 30px); display: inline; margin: 0 -3px; vertical-align: middle; }
+
+  /* 当前课程高亮 */
+  .current {
+    animation: rainbow-border 3s linear infinite, rainbow-bg 3s linear infinite, pulse-scale 1.5s ease-in-out infinite;
+    outline: 4px solid;
+    outline-offset: -2px;
+    position: relative;
+    z-index: 5;
+  }
+  @keyframes pulse-scale {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.12); }
+  }
+  @keyframes rainbow-bg {
+    0%      { background: rgba(255,0,0,0.35); }
+    14%     { background: rgba(255,136,0,0.35); }
+    28%     { background: rgba(255,221,0,0.35); }
+    42%     { background: rgba(0,204,0,0.35); }
+    57%     { background: rgba(0,136,255,0.35); }
+    71%     { background: rgba(68,0,255,0.35); }
+    85%     { background: rgba(204,0,255,0.35); }
+    100%    { background: rgba(255,0,0,0.35); }
+  }
+  .current-time-row .time-cell {
+    animation: pulse-time 2s ease-in-out infinite;
+    color: #fff !important;
+  }
+  .current-day {
+    animation: pulse-day 2s ease-in-out infinite;
+    color: #fff !important;
+  }
+  @keyframes rainbow-border {
+    0%      { outline-color: #ff0000; box-shadow: 0 0 18px #ff0000, 0 0 40px rgba(255,0,0,0.3); }
+    14%     { outline-color: #ff8800; box-shadow: 0 0 18px #ff8800, 0 0 40px rgba(255,136,0,0.3); }
+    28%     { outline-color: #ffdd00; box-shadow: 0 0 18px #ffdd00, 0 0 40px rgba(255,221,0,0.3); }
+    42%     { outline-color: #00cc00; box-shadow: 0 0 18px #00cc00, 0 0 40px rgba(0,204,0,0.3); }
+    57%     { outline-color: #0088ff; box-shadow: 0 0 18px #0088ff, 0 0 40px rgba(0,136,255,0.3); }
+    71%     { outline-color: #4400ff; box-shadow: 0 0 18px #4400ff, 0 0 40px rgba(68,0,255,0.3); }
+    85%     { outline-color: #cc00ff; box-shadow: 0 0 18px #cc00ff, 0 0 40px rgba(204,0,255,0.3); }
+    100%    { outline-color: #ff0000; box-shadow: 0 0 18px #ff0000, 0 0 40px rgba(255,0,0,0.3); }
+  }
+  @keyframes pulse-time {
+    0%, 100% { background: #e53e3e; box-shadow: 0 0 10px rgba(229, 62, 62, 0.6); }
+    50% { background: #fc8181; box-shadow: 0 0 20px rgba(229, 62, 62, 0.9); }
+  }
+  @keyframes pulse-day {
+    0%, 100% { background: linear-gradient(135deg, #f093fb, #f5576c); box-shadow: 0 0 10px rgba(240, 147, 251, 0.6); }
+    50% { background: linear-gradient(135deg, #f5576c, #f093fb); box-shadow: 0 0 20px rgba(245, 87, 108, 0.9); }
+  }
+
+  .section-divider td { padding: 4px; background: transparent; }
+  .section-divider .time-cell { background: transparent; color: #a0aec0; font-size: 11px; letter-spacing: 2px; }
+
+  /* 图例 */
+  .legend {
+    display: flex; flex-wrap: wrap; gap: 16px 28px;
+    margin-top: 20px; justify-content: center;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+    padding: 16px 24px;
+    border-radius: 16px;
+  }
+  .legend-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .legend-group-title {
+    font-size: 11px; color: #8B5E3C; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #555; font-weight: 600; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+
+  /* 备注 */
+  .notes {
+    margin-top: 16px; padding: 16px;
+    background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
+    border-radius: 16px;
+    border-left: 5px solid #4dd0e1;
+  }
+  .notes h3 { font-size: 15px; color: #00796b; margin-bottom: 10px; font-weight: 700; }
+  .notes ul { list-style: none; padding: 0; }
+  .notes li { font-size: 13px; color: #546e7a; padding: 4px 0; padding-left: 20px; position: relative; font-weight: 500; }
+  .notes li::before { content: "\2022"; position: absolute; left: 0; color: #4dd0e1; font-weight: bold; }
+
+  .footer-deco {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 24px;
+    letter-spacing: 12px;
+    opacity: 0.7;
+  }
+
+  @media (max-width: 900px) {
+    table { table-layout: auto; border-spacing: 1px; }
+    col.time-col { width: auto; }
+    th:first-child { min-width: auto; }
+    .deco-side { width: 40px; font-size: 32px; gap: 20px; }
+    .deco-left { left: -44px; padding-top: 70px; }
+    .deco-right { right: -44px; padding-top: 90px; }
+    .page-wrapper { padding: 0 44px; }
+    .container { padding: 12px; }
+    h1 { font-size: 24px; }
+    td, th { font-size: 13px; padding: 3px 2px; }
+    td .ico { font-size: 20px; }
+    .time-cell { font-size: 12px !important; }
+    .corner-deco { font-size: 36px; }
+  }
+
+  @media (max-width: 768px) {
+    table { table-layout: auto; border-spacing: 1px; }
+    col.time-col { width: auto; }
+    th:first-child { min-width: auto; }
+    .time-cell { white-space: nowrap; }
+    body {
+      overflow: auto;
+      height: auto;
+      min-height: 100vh;
+      padding: 6px;
+    }
+    body::before, body::after { display: none; }
+    .deco-side { width: 28px; font-size: 22px; gap: 10px; }
+    .deco-left { left: -30px; padding-top: 60px; }
+    .deco-right { right: -30px; padding-top: 80px; }
+    .page-wrapper { padding: 0 30px; }
+    .corner-deco { font-size: 28px; }
+    .corner-deco.tl { top: -8px; left: -8px; }
+    .corner-deco.tr { top: -8px; right: -8px; }
+    .corner-deco.bl { bottom: -8px; left: -8px; }
+    .corner-deco.br { bottom: -8px; right: -8px; }
+    .container { padding: 8px; border-radius: 16px; }
+    h1 { font-size: 20px; letter-spacing: 1px; }
+    .title-icons { font-size: 18px; letter-spacing: 3px; }
+    .subtitle { font-size: 10px; }
+    .marquee-track span { font-size: 13px; }
+    th { font-size: 12px; padding: 4px 2px; border-radius: 5px; }
+    td { font-size: 12px; padding: 2px 1px; border-radius: 4px; }
+    td .ico { font-size: 16px; margin-right: 0; }
+    .time-cell { font-size: 10px !important; min-width: auto !important; }
+    .legend { gap: 6px 12px; margin-top: 14px; padding: 8px; font-size: 11px; }
+    .legend span { font-size: 11px; }
+    .notes { padding: 8px 12px; font-size: 11px; }
+    .footer-deco { font-size: 16px; letter-spacing: 6px; margin-top: 10px; }
+  }
+
+  @media (max-width: 420px) {
+    body { padding: 3px; }
+    .container { padding: 5px; border-radius: 12px; }
+    h1 { font-size: 17px; }
+    .corner-deco { font-size: 22px; }
+    th { font-size: 10px; padding: 3px 1px; }
+    td { font-size: 10px; padding: 1px; }
+    td .ico { font-size: 13px; }
+    .time-cell { font-size: 9px !important; }
+    .marquee-wrap { padding: 3px 0; margin-bottom: 4px; }
+    .marquee-track span { font-size: 11px; }
+    .title-area { margin-bottom: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+  <div class="container">
+    <div class="deco-side deco-left">
+      <span>📖</span>
+      <span>✏️</span>
+      <span>🎵</span>
+      <span>🧮</span>
+      <span>🏀</span>
+      <span>🎨</span>
+      <span>📚</span>
+      <span>🌟</span>
+      <span>🎈</span>
+      <span>🐰</span>
+    </div>
+
+    <div class="deco-side deco-right">
+      <span>⭐</span>
+      <span>🎹</span>
+      <span>🔤</span>
+      <span>🎯</span>
+      <span>🌸</span>
+      <span>🦄</span>
+      <span>📝</span>
+      <span>🐳</span>
+      <span>🎪</span>
+      <span>🌞</span>
+    </div>
+
+    <span class="corner-deco tl">📖</span>
+    <span class="corner-deco tr">⭐</span>
+    <span class="corner-deco bl">🎈</span>
+    <span class="corner-deco br">🌸</span>
+
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <span>📖 学好拼音 ✏️ 认真写字 🧮 快乐数学 🔤 开心识字 ⭐ 每天进步一点点 🦄 准备上小学啦 🌻 加油章梓淇 🎯 你最棒 🌸 </span>
+        <span>📖 学好拼音 ✏️ 认真写字 🧮 快乐数学 🔤 开心识字 ⭐ 每天进步一点点 🦄 准备上小学啦 🌻 加油章梓淇 🎯 你最棒 🌸 </span>
+      </div>
+    </div>
+
+    <div class="title-area">
+      <h1>章梓淇 幼小衔接课程表</h1>
+      <div class="subtitle">2026 暑期 - 为小学做准备</div>
+    </div>
+
+    <table>
+      <colgroup>
+        <col class="time-col">
+        <col class="day-col" span="7">
+      </colgroup>
+      <thead>
+        <tr>
+          <th>时间</th><th>周一</th><th>周二</th><th>周三</th><th>周四</th><th>周五</th><th>周六</th><th>周日</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="time-cell">07:30 - 08:00</td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌤</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌞</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌻</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">💪</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">😊</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌈</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌈</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">08:00 - 08:30</td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">08:30 - 09:00</td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
+        </tr>
+        <!-- 上午学习时段 -->
+        <tr>
+          <td class="time-cell">09:00 - 09:30</td>
+          <td class="pinyin"><span class="ico">🔤</span> 拼音 <span class="ico">📖</span></td>
+          <td class="literacy"><span class="ico">📝</span> 识字 <span class="ico">🔤</span></td>
+          <td class="pinyin"><span class="ico">🔤</span> 拼音 <span class="ico">📖</span></td>
+          <td class="literacy"><span class="ico">📝</span> 识字 <span class="ico">🔤</span></td>
+          <td class="pinyin"><span class="ico">🔤</span> 拼音 <span class="ico">📖</span></td>
+          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">09:30 - 10:00</td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="art-draw" rowspan="4"><span class="ico">🎨</span> 美术 <span class="ico">🖌</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">10:00 - 10:30</td>
+          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
+          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
+          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
+          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
+          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
+          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">10:30 - 11:00</td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">11:00 - 11:30</td>
+          <td class="writing"><span class="ico">✏️</span> 写字 <span class="ico">📝</span></td>
+          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
+          <td class="writing"><span class="ico">✏️</span> 写字 <span class="ico">📝</span></td>
+          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
+          <td class="reading"><span class="ico">📚</span> 阅读 <span class="ico">🏰</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">11:30 - 12:30</td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">12:30 - 14:30</td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
+        </tr>
+        <!-- 下午时段 -->
+        <tr>
+          <td class="time-cell">14:30 - 15:30</td>
+          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
+          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
+          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
+          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
+          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
+          <td class="sport-out" rowspan="3"><span class="ico">🛝</span> 户外运动 <span class="ico">🌳</span></td>
+          <td class="art-piano"><span class="ico">🎹</span> 钢琴 <span class="ico">🎵</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">15:30 - 16:30</td>
+          <td class="reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td>
+          <td class="art-piano"><span class="ico">🎹</span> 练琴 <span class="ico">🎶</span></td>
+          <td class="reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">16:30 - 17:30</td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="sport"><span class="ico">🏀</span> 篮球 <span class="ico">⛹</span></td>
+          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="sport"><span class="ico">🏀</span> 篮球 <span class="ico">⛹</span></td>
+          <td class="sport"><span class="ico">🤸</span> 跳绳 <span class="ico">🏅</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">17:30 - 18:30</td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">18:30 - 19:00</td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+        </tr>
+        <!-- 晚间时段 -->
+        <tr>
+          <td class="time-cell">19:00 - 19:30</td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">19:30 - 20:00</td>
+          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
+          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="reading"><span class="ico">📚</span> 阅读 <span class="ico">🏰</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
+          <td class="reading"><span class="ico">📚</span> 阅读 <span class="ico">🏰</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">20:00 - 20:30</td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+        </tr>
+        <tr>
+          <td class="time-cell">20:30 - 07:30</td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="legend">
+      <div class="legend-group">
+        <div class="legend-group-title">学科类</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#e53e3e,#c53030)"></span> 拼音</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#dd6b20,#c05621)"></span> 识字</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#d69e2e,#b7791f)"></span> 数学</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#e53e3e,#dd6b20)"></span> 写字</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#319795,#2c7a7b)"></span> 阅读</div>
+      </div>
+      <div class="legend-group">
+        <div class="legend-group-title">英文类</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#2b6cb0,#2c5282)"></span> Polly英语</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#4299e1,#3182ce)"></span> 伴鱼</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#63b3ed,#4299e1)"></span> 动画片</div>
+      </div>
+      <div class="legend-group">
+        <div class="legend-group-title">思维</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#805ad5,#6b46c1)"></span> 火花思维</div>
+      </div>
+      <div class="legend-group">
+        <div class="legend-group-title">运动类</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#38a169,#276749)"></span> 篮球</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#48bb78,#38a169)"></span> 户外运动</div>
+      </div>
+      <div class="legend-group">
+        <div class="legend-group-title">艺术类</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#d53f8c,#b83280)"></span> 钢琴</div>
+        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#ed64a6,#d53f8c)"></span> 美术</div>
+      </div>
+    </div>
+
+    <div class="notes">
+      <h3>📌 幼小衔接学习要点</h3>
+      <ul>
+        <li>拼音：学习声母、韵母、整体认读音节，能拼读简单音节</li>
+        <li>识字：每周认识10-15个常用汉字，通过游戏和卡片巩固</li>
+        <li>数学：20以内加减法、认识图形、简单规律</li>
+        <li>写字：正确握笔姿势，练习基本笔画和简单汉字</li>
+        <li>阅读：每天亲子阅读15-20分钟，培养阅读习惯</li>
+        <li>每节课30分钟，课间充分休息，劳逸结合</li>
+      </ul>
+    </div>
+
+    <div class="footer-deco">🎒✏️📖🧮🌟📚⭐🎈</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const tbody = document.querySelector('table tbody');
+  const { rows } = tbody;
+  const numRows = rows.length;
+  const numCols = 8;
+
+  const grid = Array.from({ length: numRows }, () => new Array(numCols));
+  for (let r = 0; r < numRows; r++) {
+    const cells = rows[r].cells;
+    let c = 0;
+    for (let ci = 0; ci < cells.length; ci++) {
+      while (c < numCols && grid[r][c]) c++;
+      if (c >= numCols) break;
+      const cell = cells[ci];
+      const rs = cell.rowSpan || 1;
+      const cs = cell.colSpan || 1;
+      for (let dr = 0; dr < rs; dr++) {
+        for (let dc = 0; dc < cs; dc++) {
+          if (r + dr < numRows && c + dc < numCols) {
+            grid[r + dr][c + dc] = cell;
+          }
+        }
+      }
+      c += cs;
+    }
+  }
+
+  const ths = document.querySelectorAll('table thead th');
+
+  function highlight(colIndex, currentMins) {
+    document.querySelectorAll('.current').forEach(el => el.classList.remove('current'));
+    document.querySelectorAll('.current-time-row').forEach(el => el.classList.remove('current-time-row'));
+    document.querySelectorAll('.current-day').forEach(el => el.classList.remove('current-day'));
+
+    if (ths[colIndex]) ths[colIndex].classList.add('current-day');
+
+    for (let r = 0; r < numRows; r++) {
+      const timeCell = grid[r][0];
+      if (!timeCell) continue;
+      const match = timeCell.textContent.trim().match(/(\d{2}):(\d{2})\s*-\s*(\d{2}):(\d{2})/);
+      if (!match) continue;
+      const startMins = parseInt(match[1]) * 60 + parseInt(match[2]);
+      const endMins = parseInt(match[3]) * 60 + parseInt(match[4]);
+      const inRange = endMins > startMins
+        ? currentMins >= startMins && currentMins < endMins
+        : currentMins >= startMins || currentMins < endMins;
+      if (inRange) {
+        const targetCell = grid[r][colIndex];
+        if (targetCell && !targetCell.classList.contains('empty')) {
+          targetCell.classList.add('current');
+        }
+        for (let hr = 0; hr < numRows; hr++) {
+          if (grid[hr][0] === timeCell) rows[hr].classList.add('current-time-row');
+        }
+        break;
+      }
+    }
+  }
+
+  const now = new Date();
+  highlight(now.getDay() || 7, now.getHours() * 60 + now.getMinutes());
+
+  setInterval(() => {
+    const n = new Date();
+    highlight(n.getDay() || 7, n.getHours() * 60 + n.getMinutes());
+  }, 30000);
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      const n = new Date();
+      highlight(n.getDay() || 7, n.getHours() * 60 + n.getMinutes());
+    }
+  });
+})();
+</script>
+</body>
+</html>
