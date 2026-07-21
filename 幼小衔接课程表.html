@@ -12,7 +12,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 40%, #a8edea 100%);
+    background: linear-gradient(180deg, #a8edea 0%, #fed6e3 40%, #d4fc79 100%);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -24,7 +24,7 @@
   }
 
   body::before {
-    content: "\2601\FE0F";
+    content: "☁️";
     position: fixed;
     top: 60px;
     left: 30px;
@@ -33,7 +33,7 @@
     animation: float 6s ease-in-out infinite;
   }
   body::after {
-    content: "\2601\FE0F";
+    content: "☁️";
     position: fixed;
     top: 30px;
     right: 80px;
@@ -120,7 +120,7 @@
   .marquee-wrap {
     overflow: hidden;
     border-radius: 10px;
-    background: linear-gradient(90deg, #f093fb, #f5576c, #ffecd2, #43e97b, #4facfe, #f093fb);
+    background: linear-gradient(90deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb, #84fab0, #8fd3f4, #ff9a9e);
     background-size: 300% 100%;
     animation: marquee-bg 6s linear infinite;
     padding: 6px 0;
@@ -153,7 +153,7 @@
   h1 {
     font-size: 28px;
     font-weight: 800;
-    background: linear-gradient(135deg, #f5576c, #ff9a9e, #4facfe, #43e97b);
+    background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe, #43e97b);
     background-size: 300% 300%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -178,7 +178,7 @@
   col.time-col { width: 12%; }
   col.day-col { width: 12.57%; }
   th {
-    background: linear-gradient(135deg, #f5576c, #ff6b6b);
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: #fff; padding: 2px 2px; font-size: clamp(10px, 1.4vw, 19px);
     font-weight: 700; border-radius: 8px; text-align: center;
     letter-spacing: 1px;
@@ -206,37 +206,42 @@
   }
   .empty { background: #f9fafb; color: #d1d5db; }
 
-  /* 学科类 - 红橙色系 */
-  .pinyin   { background: linear-gradient(135deg, #e53e3e, #c53030); color: #fff; font-weight: 600; }
-  .literacy { background: linear-gradient(135deg, #dd6b20, #c05621); color: #fff; font-weight: 600; }
-  .math     { background: linear-gradient(135deg, #d69e2e, #b7791f); color: #fff; font-weight: 600; }
-  .writing  { background: linear-gradient(135deg, #e53e3e, #dd6b20); color: #fff; font-weight: 600; }
-  .reading  { background: linear-gradient(135deg, #319795, #2c7a7b); color: #fff; font-weight: 600; }
+  /* 幼小衔接 - 大色块 */
+  .school {
+    background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+    background-size: 200% 200%;
+    animation: gradient-shift 5s ease infinite;
+    color: #fff;
+    font-weight: 700;
+    font-size: clamp(14px, 2vw, 22px) !important;
+    letter-spacing: 2px;
+    border-radius: 12px;
+    white-space: normal !important;
+  }
+  .school .ico { font-size: clamp(18px, 3vw, 40px) !important; display: block; margin: 4px auto; }
+  .school .sub { display: block; font-size: 0.65em; opacity: 0.85; margin-top: 2px; letter-spacing: 0; }
 
-  /* 英文类 - 蓝色系 */
-  .eng-polly   { background: linear-gradient(135deg, #2b6cb0, #2c5282); color: #fff; font-weight: 600; }
-  .eng-reading { background: linear-gradient(135deg, #4299e1, #3182ce); color: #fff; font-weight: 500; }
-  .eng-cartoon { background: linear-gradient(135deg, #63b3ed, #4299e1); color: #fff; font-weight: 500; }
+  /* 课程色块 */
+  .eng-polly, .eng-reading, .eng-cartoon,
+  .think, .sport, .sport-out, .free,
+  .art-piano, .art-draw, .dinner { color: #fff; }
+  .eng-polly, .think, .sport, .sport-out, .art-piano, .art-draw { font-weight: 600; }
+  .eng-reading, .eng-cartoon, .free, .dinner { font-weight: 500; }
 
-  /* 思维类 - 紫色系 */
-  .think { background: linear-gradient(135deg, #805ad5, #6b46c1); color: #fff; font-weight: 600; }
-
-  /* 运动类 - 绿色系 */
-  .sport     { background: linear-gradient(135deg, #38a169, #276749); color: #fff; font-weight: 600; }
-  .sport-out { background: linear-gradient(135deg, #48bb78, #38a169); color: #fff; font-weight: 600; }
-  .free      { background: linear-gradient(135deg, #68d391, #48bb78); color: #fff; font-weight: 500; }
-
-  /* 艺术类 - 粉色系 */
-  .art-piano { background: linear-gradient(135deg, #d53f8c, #b83280); color: #fff; font-weight: 600; }
-  .art-draw  { background: linear-gradient(135deg, #ed64a6, #d53f8c); color: #fff; font-weight: 600; }
-
-  /* 其他 */
-  .dinner { background: linear-gradient(135deg, #f6ad55, #ed8936); color: #fff; font-weight: 500; }
-  .rest   { background: linear-gradient(135deg, #e2e8f0, #cbd5e0); color: #718096; font-weight: 500; }
+  .eng-polly   { background: linear-gradient(135deg, #2b6cb0, #2c5282); }
+  .eng-reading { background: linear-gradient(135deg, #4299e1, #3182ce); }
+  .eng-cartoon { background: linear-gradient(135deg, #63b3ed, #4299e1); }
+  .think       { background: linear-gradient(135deg, #805ad5, #6b46c1); }
+  .sport       { background: linear-gradient(135deg, #38a169, #276749); }
+  .sport-out   { background: linear-gradient(135deg, #48bb78, #38a169); }
+  .free        { background: linear-gradient(135deg, #68d391, #48bb78); }
+  .art-piano   { background: linear-gradient(135deg, #d53f8c, #b83280); }
+  .art-draw    { background: linear-gradient(135deg, #ed64a6, #d53f8c); }
+  .dinner      { background: linear-gradient(135deg, #f6ad55, #ed8936); }
+  .rest        { background: linear-gradient(135deg, #e2e8f0, #cbd5e0); color: #718096; font-weight: 500; }
 
   td .ico { font-size: clamp(13px, 2.2vw, 30px); display: inline; margin: 0 -3px; vertical-align: middle; }
 
-  /* 当前课程高亮 */
   .current {
     animation: rainbow-border 3s linear infinite, rainbow-bg 3s linear infinite, pulse-scale 1.5s ease-in-out infinite;
     outline: 4px solid;
@@ -285,45 +290,6 @@
     50% { background: linear-gradient(135deg, #f5576c, #f093fb); box-shadow: 0 0 20px rgba(245, 87, 108, 0.9); }
   }
 
-  .section-divider td { padding: 4px; background: transparent; }
-  .section-divider .time-cell { background: transparent; color: #a0aec0; font-size: 11px; letter-spacing: 2px; }
-
-  /* 图例 */
-  .legend {
-    display: flex; flex-wrap: wrap; gap: 16px 28px;
-    margin-top: 20px; justify-content: center;
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-    padding: 16px 24px;
-    border-radius: 16px;
-  }
-  .legend-group { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
-  .legend-group-title {
-    font-size: 11px; color: #8B5E3C; font-weight: 700;
-    letter-spacing: 1px; text-transform: uppercase;
-  }
-  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #555; font-weight: 600; }
-  .legend-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 2px 4px rgba(0,0,0,0.15); }
-
-  /* 备注 */
-  .notes {
-    margin-top: 16px; padding: 16px;
-    background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
-    border-radius: 16px;
-    border-left: 5px solid #4dd0e1;
-  }
-  .notes h3 { font-size: 15px; color: #00796b; margin-bottom: 10px; font-weight: 700; }
-  .notes ul { list-style: none; padding: 0; }
-  .notes li { font-size: 13px; color: #546e7a; padding: 4px 0; padding-left: 20px; position: relative; font-weight: 500; }
-  .notes li::before { content: "\2022"; position: absolute; left: 0; color: #4dd0e1; font-weight: bold; }
-
-  .footer-deco {
-    text-align: center;
-    margin-top: 16px;
-    font-size: 24px;
-    letter-spacing: 12px;
-    opacity: 0.7;
-  }
-
   @media (max-width: 900px) {
     table { table-layout: auto; border-spacing: 1px; }
     col.time-col { width: auto; }
@@ -345,12 +311,7 @@
     col.time-col { width: auto; }
     th:first-child { min-width: auto; }
     .time-cell { white-space: nowrap; }
-    body {
-      overflow: auto;
-      height: auto;
-      min-height: 100vh;
-      padding: 6px;
-    }
+    body { overflow: auto; height: auto; min-height: 100vh; padding: 6px; }
     body::before, body::after { display: none; }
     .deco-side { width: 28px; font-size: 22px; gap: 10px; }
     .deco-left { left: -30px; padding-top: 60px; }
@@ -370,10 +331,9 @@
     td { font-size: 12px; padding: 2px 1px; border-radius: 4px; }
     td .ico { font-size: 16px; margin-right: 0; }
     .time-cell { font-size: 10px !important; min-width: auto !important; }
-    .legend { gap: 6px 12px; margin-top: 14px; padding: 8px; font-size: 11px; }
-    .legend span { font-size: 11px; }
-    .notes { padding: 8px 12px; font-size: 11px; }
-    .footer-deco { font-size: 16px; letter-spacing: 6px; margin-top: 10px; }
+    .school { font-size: 13px !important; }
+    .school .ico { font-size: 24px !important; }
+    #debug-panel { bottom: 8px; right: 8px; font-size: 12px; }
   }
 
   @media (max-width: 420px) {
@@ -388,6 +348,8 @@
     .marquee-wrap { padding: 3px 0; margin-bottom: 4px; }
     .marquee-track span { font-size: 11px; }
     .title-area { margin-bottom: 4px; }
+    .school { font-size: 10px !important; }
+    .school .ico { font-size: 18px !important; }
   }
 </style>
 </head>
@@ -396,46 +358,45 @@
 <div class="page-wrapper">
   <div class="container">
     <div class="deco-side deco-left">
-      <span>📖</span>
-      <span>✏️</span>
+      <span>🌈</span>
+      <span>📚</span>
       <span>🎵</span>
-      <span>🧮</span>
+      <span>⭐</span>
       <span>🏀</span>
       <span>🎨</span>
-      <span>📚</span>
-      <span>🌟</span>
+      <span>🌻</span>
+      <span>🦋</span>
       <span>🎈</span>
       <span>🐰</span>
     </div>
 
     <div class="deco-side deco-right">
-      <span>⭐</span>
+      <span>🌟</span>
       <span>🎹</span>
-      <span>🔤</span>
+      <span>🐱</span>
       <span>🎯</span>
       <span>🌸</span>
       <span>🦄</span>
-      <span>📝</span>
+      <span>🍭</span>
       <span>🐳</span>
       <span>🎪</span>
       <span>🌞</span>
     </div>
 
-    <span class="corner-deco tl">📖</span>
+    <span class="corner-deco tl">🌈</span>
     <span class="corner-deco tr">⭐</span>
     <span class="corner-deco bl">🎈</span>
     <span class="corner-deco br">🌸</span>
 
     <div class="marquee-wrap">
       <div class="marquee-track">
-        <span>📖 学好拼音 ✏️ 认真写字 🧮 快乐数学 🔤 开心识字 ⭐ 每天进步一点点 🦄 准备上小学啦 🌻 加油章梓淇 🎯 你最棒 🌸 </span>
-        <span>📖 学好拼音 ✏️ 认真写字 🧮 快乐数学 🔤 开心识字 ⭐ 每天进步一点点 🦄 准备上小学啦 🌻 加油章梓淇 🎯 你最棒 🌸 </span>
+        <span>🎒 准备上小学啦 📖 学好拼音 ✏️ 认真写字 🧮 快乐数学 🔤 开心识字 ⭐ 每天进步一点点 🦄 加油章梓淇 🌻 你最棒 🎯 坚持就是胜利 🌸 </span>
+        <span>🎒 准备上小学啦 📖 学好拼音 ✏️ 认真写字 🧮 快乐数学 🔤 开心识字 ⭐ 每天进步一点点 🦄 加油章梓淇 🌻 你最棒 🎯 坚持就是胜利 🌸 </span>
       </div>
     </div>
 
     <div class="title-area">
       <h1>章梓淇 幼小衔接课程表</h1>
-      <div class="subtitle">2026 暑期 - 为小学做准备</div>
     </div>
 
     <table>
@@ -451,171 +412,89 @@
       <tbody>
         <tr>
           <td class="time-cell">07:30 - 08:00</td>
-          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌤</span></td>
-          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌞</span></td>
-          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌻</span></td>
-          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">💪</span></td>
-          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">😊</span></td>
-          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌈</span></td>
-          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌈</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌤</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌞</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌻</span></td>
+          <td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">💪</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">😊</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌈</span></td><td class="rest"><span class="ico">⏰</span> 起床 <span class="ico">🌈</span></td>
         </tr>
         <tr>
           <td class="time-cell">08:00 - 08:30</td>
-          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
-          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
-          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
-          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
-          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
-          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
-          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
+          <td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td><td class="dinner"><span class="ico">🥛</span> 早饭 <span class="ico">🥚</span></td>
         </tr>
+        <!-- 08:30-16:00 幼小衔接(周一~五) / 周末自由 -->
         <tr>
-          <td class="time-cell">08:30 - 09:00</td>
-          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
-          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
-          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
-          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
-          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
-          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
-          <td class="rest"><span class="ico">🪥</span> 洗漱 <span class="ico">😁</span></td>
-        </tr>
-        <!-- 上午学习时段 -->
-        <tr>
-          <td class="time-cell">09:00 - 09:30</td>
-          <td class="pinyin"><span class="ico">🔤</span> 拼音 <span class="ico">📖</span></td>
-          <td class="literacy"><span class="ico">📝</span> 识字 <span class="ico">🔤</span></td>
-          <td class="pinyin"><span class="ico">🔤</span> 拼音 <span class="ico">📖</span></td>
-          <td class="literacy"><span class="ico">📝</span> 识字 <span class="ico">🔤</span></td>
-          <td class="pinyin"><span class="ico">🔤</span> 拼音 <span class="ico">📖</span></td>
+          <td class="time-cell">08:30 - 09:30</td>
+          <td class="school" rowspan="5"><span class="ico">🎒</span><span class="sub">幼小衔接</span><span class="ico">📖</span><span class="sub">拼音·识字·数学·写字</span></td>
+          <td class="school" rowspan="5"><span class="ico">🎒</span><span class="sub">幼小衔接</span><span class="ico">📖</span><span class="sub">拼音·识字·数学·写字</span></td>
+          <td class="school" rowspan="5"><span class="ico">🎒</span><span class="sub">幼小衔接</span><span class="ico">📖</span><span class="sub">拼音·识字·数学·写字</span></td>
+          <td class="school" rowspan="5"><span class="ico">🎒</span><span class="sub">幼小衔接</span><span class="ico">📖</span><span class="sub">拼音·识字·数学·写字</span></td>
+          <td class="school" rowspan="5"><span class="ico">🎒</span><span class="sub">幼小衔接</span><span class="ico">📖</span><span class="sub">拼音·识字·数学·写字</span></td>
           <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
           <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
         </tr>
         <tr>
-          <td class="time-cell">09:30 - 10:00</td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="art-draw" rowspan="4"><span class="ico">🎨</span> 美术 <span class="ico">🖌</span></td>
-        </tr>
-        <tr>
-          <td class="time-cell">10:00 - 10:30</td>
-          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
-          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
-          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
-          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
-          <td class="math"><span class="ico">🧮</span> 数学 <span class="ico">➕</span></td>
+          <td class="time-cell">09:30 - 11:30</td>
           <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
-        </tr>
-        <tr>
-          <td class="time-cell">10:30 - 11:00</td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
-        </tr>
-        <tr>
-          <td class="time-cell">11:00 - 11:30</td>
-          <td class="writing"><span class="ico">✏️</span> 写字 <span class="ico">📝</span></td>
-          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
-          <td class="writing"><span class="ico">✏️</span> 写字 <span class="ico">📝</span></td>
-          <td class="eng-reading"><span class="ico">🐠</span> 伴鱼 <span class="ico">📖</span></td>
-          <td class="reading"><span class="ico">📚</span> 阅读 <span class="ico">🏰</span></td>
-          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="art-draw" rowspan="2"><span class="ico">🎨</span> 美术 <span class="ico">🖌</span></td>
         </tr>
         <tr>
           <td class="time-cell">11:30 - 12:30</td>
-          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
           <td class="dinner"><span class="ico">🥗</span> 中饭 <span class="ico">🍚</span></td>
         </tr>
         <tr>
           <td class="time-cell">12:30 - 14:30</td>
           <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
           <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 午休 <span class="ico">🛏</span></td>
         </tr>
-        <!-- 下午时段 -->
         <tr>
-          <td class="time-cell">14:30 - 15:30</td>
-          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
-          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
-          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
-          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
-          <td class="dinner"><span class="ico">🍰</span> 下午茶 <span class="ico">☕</span></td>
-          <td class="sport-out" rowspan="3"><span class="ico">🛝</span> 户外运动 <span class="ico">🌳</span></td>
+          <td class="time-cell">14:30 - 16:00</td>
+          <td class="sport-out"><span class="ico">🛝</span> 户外 <span class="ico">🌳</span></td>
           <td class="art-piano"><span class="ico">🎹</span> 钢琴 <span class="ico">🎵</span></td>
         </tr>
+        <!-- 16:00后 回家 -->
         <tr>
-          <td class="time-cell">15:30 - 16:30</td>
-          <td class="reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td>
-          <td class="art-piano"><span class="ico">🎹</span> 练琴 <span class="ico">🎶</span></td>
-          <td class="reading"><span class="ico">📚</span> 绘本 <span class="ico">🏰</span></td>
-          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
-          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="time-cell">16:00 - 16:30</td>
+          <td class="dinner"><span class="ico">🍰</span> 点心 <span class="ico">🧃</span></td><td class="dinner"><span class="ico">🍰</span> 点心 <span class="ico">🧃</span></td><td class="dinner"><span class="ico">🍰</span> 点心 <span class="ico">🧃</span></td>
+          <td class="dinner"><span class="ico">🍰</span> 点心 <span class="ico">🧃</span></td><td class="dinner"><span class="ico">🍰</span> 点心 <span class="ico">🧃</span></td><td class="dinner"><span class="ico">🍰</span> 点心 <span class="ico">🧃</span></td><td class="dinner"><span class="ico">🍰</span> 点心 <span class="ico">🧃</span></td>
         </tr>
         <tr>
           <td class="time-cell">16:30 - 17:30</td>
           <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
-          <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
+          <td class="art-piano"><span class="ico">🎹</span> 练琴 <span class="ico">🎶</span></td>
           <td class="sport"><span class="ico">🏀</span> 篮球 <span class="ico">⛹</span></td>
           <td class="free"><span class="ico">🎠</span> 活动 <span class="ico">🎪</span></td>
           <td class="sport"><span class="ico">🏀</span> 篮球 <span class="ico">⛹</span></td>
           <td class="sport"><span class="ico">🤸</span> 跳绳 <span class="ico">🏅</span></td>
+          <td class="sport-out"><span class="ico">🛝</span> 户外 <span class="ico">🌳</span></td>
         </tr>
         <tr>
-          <td class="time-cell">17:30 - 18:30</td>
-          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
-          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="time-cell">17:30 - 18:00</td>
+          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
         </tr>
         <tr>
-          <td class="time-cell">18:30 - 19:00</td>
-          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
-          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
-          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
-          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
-          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
-          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
-          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="time-cell">18:00 - 19:00</td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td><td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td><td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
+          <td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td><td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td><td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td><td class="dinner"><span class="ico">🥗</span> 晚饭 <span class="ico">🍜</span></td>
         </tr>
-        <!-- 晚间时段 -->
         <tr>
           <td class="time-cell">19:00 - 19:30</td>
-          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
-          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
-          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
-          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
-          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
-          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
-          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
+          <td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td><td class="rest"><span class="ico">🚶</span> 散步 <span class="ico">🌙</span></td>
         </tr>
         <tr>
           <td class="time-cell">19:30 - 20:00</td>
-          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
           <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
-          <td class="eng-polly"><span class="ico">🦜</span> Polly <span class="ico">💬</span></td>
-          <td class="reading"><span class="ico">📚</span> 阅读 <span class="ico">🏰</span></td>
-          <td class="rest"><span class="ico">😌</span> 休息 <span class="ico">🛋</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
           <td class="think"><span class="ico">🐵</span> 思维 <span class="ico">🧠</span></td>
-          <td class="reading"><span class="ico">📚</span> 阅读 <span class="ico">🏰</span></td>
+          <td class="eng-cartoon"><span class="ico">📺</span> 动画片 <span class="ico">🍿</span></td>
         </tr>
         <tr>
           <td class="time-cell">20:00 - 20:30</td>
@@ -629,61 +508,12 @@
         </tr>
         <tr>
           <td class="time-cell">20:30 - 07:30</td>
-          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
-          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
+          <td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td><td class="rest"><span class="ico">😴</span> 睡觉 <span class="ico">🛏</span></td>
         </tr>
       </tbody>
     </table>
 
-    <div class="legend">
-      <div class="legend-group">
-        <div class="legend-group-title">学科类</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#e53e3e,#c53030)"></span> 拼音</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#dd6b20,#c05621)"></span> 识字</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#d69e2e,#b7791f)"></span> 数学</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#e53e3e,#dd6b20)"></span> 写字</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#319795,#2c7a7b)"></span> 阅读</div>
-      </div>
-      <div class="legend-group">
-        <div class="legend-group-title">英文类</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#2b6cb0,#2c5282)"></span> Polly英语</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#4299e1,#3182ce)"></span> 伴鱼</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#63b3ed,#4299e1)"></span> 动画片</div>
-      </div>
-      <div class="legend-group">
-        <div class="legend-group-title">思维</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#805ad5,#6b46c1)"></span> 火花思维</div>
-      </div>
-      <div class="legend-group">
-        <div class="legend-group-title">运动类</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#38a169,#276749)"></span> 篮球</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#48bb78,#38a169)"></span> 户外运动</div>
-      </div>
-      <div class="legend-group">
-        <div class="legend-group-title">艺术类</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#d53f8c,#b83280)"></span> 钢琴</div>
-        <div class="legend-item"><span class="legend-dot" style="background:linear-gradient(135deg,#ed64a6,#d53f8c)"></span> 美术</div>
-      </div>
-    </div>
-
-    <div class="notes">
-      <h3>📌 幼小衔接学习要点</h3>
-      <ul>
-        <li>拼音：学习声母、韵母、整体认读音节，能拼读简单音节</li>
-        <li>识字：每周认识10-15个常用汉字，通过游戏和卡片巩固</li>
-        <li>数学：20以内加减法、认识图形、简单规律</li>
-        <li>写字：正确握笔姿势，练习基本笔画和简单汉字</li>
-        <li>阅读：每天亲子阅读15-20分钟，培养阅读习惯</li>
-        <li>每节课30分钟，课间充分休息，劳逸结合</li>
-      </ul>
-    </div>
-
-    <div class="footer-deco">🎒✏️📖🧮🌟📚⭐🎈</div>
   </div>
 </div>
 
@@ -716,6 +546,127 @@
   }
 
   const ths = document.querySelectorAll('table thead th');
+  let audioCtx;
+  let prevCell = null;
+
+  let bellNodes = null;
+
+  function stopBell() {
+    if (!bellNodes) return;
+    const { oscs, master, ctx } = bellNodes;
+    const t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(master.gain.value, t);
+    master.gain.linearRampToValueAtTime(0, t + 0.3);
+    oscs.forEach(o => o.stop(t + 0.4));
+    bellNodes = null;
+  }
+  window._stopBell = stopBell;
+
+  function playBell() {
+    stopBell();
+    if (window._stopClickSound) window._stopClickSound();
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    const t = ctx.currentTime;
+    const dur = 22.4;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.15, t);
+    master.gain.linearRampToValueAtTime(0.7, t + dur * 0.85);
+    master.gain.linearRampToValueAtTime(0.5, t + dur);
+    master.connect(ctx.destination);
+
+    const melody = [
+      { f: 784, start: 0 },{ f: 659, start: 0.35 },{ f: 523, start: 0.7 },
+      { f: 784, start: 1.3 },{ f: 659, start: 1.65 },{ f: 523, start: 2.0 },
+      { f: 587, start: 2.6 },{ f: 587, start: 2.95 },{ f: 587, start: 3.3 },
+      { f: 698, start: 3.65 },{ f: 659, start: 4.0 },{ f: 698, start: 4.35 },{ f: 784, start: 4.7 },
+      { f: 784, start: 5.5 },{ f: 659, start: 5.85 },{ f: 523, start: 6.2 },
+      { f: 784, start: 6.8 },{ f: 659, start: 7.15 },{ f: 523, start: 7.5 },
+      { f: 587, start: 8.1 },{ f: 587, start: 8.45 },{ f: 587, start: 8.8 },
+      { f: 698, start: 9.15 },{ f: 659, start: 9.5 },{ f: 587, start: 9.85 },{ f: 523, start: 10.2 },
+    ];
+    const loopLen = 11.2;
+    const repeats = 2;
+    const oscs = [];
+
+    for (let i = 0; i < repeats; i++) {
+      melody.forEach(note => {
+        const offset = t + i * loopLen + note.start;
+        if (offset >= t + dur) return;
+        const env = ctx.createGain();
+        env.connect(master);
+        [{ ratio: 1, vol: 0.5 },{ ratio: 2, vol: 0.15 },{ ratio: 3, vol: 0.06 }].forEach(p => {
+          const osc = ctx.createOscillator();
+          const pGain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(note.f * p.ratio, offset);
+          pGain.gain.setValueAtTime(p.vol, offset);
+          pGain.gain.exponentialRampToValueAtTime(p.vol * 0.3, offset + 0.6);
+          osc.connect(pGain);
+          pGain.connect(env);
+          osc.start(offset);
+          osc.stop(offset + 0.7);
+          oscs.push(osc);
+        });
+        env.gain.setValueAtTime(0, offset);
+        env.gain.linearRampToValueAtTime(1, offset + 0.01);
+        env.gain.exponentialRampToValueAtTime(0.01, offset + 0.65);
+      });
+    }
+    bellNodes = { oscs, master, ctx };
+    setTimeout(() => { bellNodes = null; }, dur * 1000);
+  }
+
+  function playLullaby() {
+    stopBell();
+    if (window._stopClickSound) window._stopClickSound();
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const ctx = audioCtx;
+    const t = ctx.currentTime;
+    const beat = 0.8;
+    const melody = [
+      { f: 330, start: 0 },{ f: 330, start: beat },{ f: 392, start: beat * 2, len: beat * 1.5 },
+      { f: 330, start: beat * 4 },{ f: 330, start: beat * 5 },{ f: 392, start: beat * 6, len: beat * 1.5 },
+      { f: 330, start: beat * 8 },{ f: 392, start: beat * 9 },{ f: 523, start: beat * 10, len: beat * 1.2 },
+      { f: 494, start: beat * 11.5 },{ f: 440, start: beat * 12.5, len: beat * 1.5 },
+      { f: 440, start: beat * 14.5 },{ f: 392, start: beat * 15.5 },{ f: 349, start: beat * 16.5, len: beat * 1.2 },
+      { f: 349, start: beat * 18 },{ f: 440, start: beat * 19 },{ f: 523, start: beat * 20, len: beat * 1.2 },
+      { f: 494, start: beat * 21.5 },{ f: 440, start: beat * 22.5 },{ f: 392, start: beat * 23.5, len: beat * 2 },
+    ];
+    const dur = beat * 26;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.3, t);
+    master.gain.linearRampToValueAtTime(0.25, t + dur * 0.7);
+    master.gain.linearRampToValueAtTime(0.05, t + dur);
+    master.connect(ctx.destination);
+    const oscs = [];
+    melody.forEach(note => {
+      const offset = t + note.start;
+      const noteLen = note.len || beat * 0.9;
+      if (offset >= t + dur) return;
+      const env = ctx.createGain();
+      env.connect(master);
+      [{ ratio: 1, vol: 0.4 },{ ratio: 2, vol: 0.08 }].forEach(p => {
+        const osc = ctx.createOscillator();
+        const pGain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.f * p.ratio, offset);
+        pGain.gain.setValueAtTime(p.vol, offset);
+        pGain.gain.exponentialRampToValueAtTime(p.vol * 0.15, offset + noteLen);
+        osc.connect(pGain);
+        pGain.connect(env);
+        osc.start(offset);
+        osc.stop(offset + noteLen + 0.2);
+        oscs.push(osc);
+      });
+      env.gain.setValueAtTime(0, offset);
+      env.gain.linearRampToValueAtTime(1, offset + 0.03);
+      env.gain.exponentialRampToValueAtTime(0.01, offset + noteLen);
+    });
+    bellNodes = { oscs, master, ctx };
+    setTimeout(() => { bellNodes = null; }, dur * 1000);
+  }
 
   function highlight(colIndex, currentMins) {
     document.querySelectorAll('.current').forEach(el => el.classList.remove('current'));
@@ -738,6 +689,19 @@
         const targetCell = grid[r][colIndex];
         if (targetCell && !targetCell.classList.contains('empty')) {
           targetCell.classList.add('current');
+          if (prevCell !== targetCell) {
+            if (prevCell !== null) {
+              const txt = targetCell.textContent || '';
+              if (txt.includes('午休') || txt.includes('睡觉')) {
+                playLullaby();
+              } else {
+                playBell();
+              }
+            }
+            prevCell = targetCell;
+          }
+        } else {
+          if (prevCell !== null) { playBell(); prevCell = null; }
         }
         for (let hr = 0; hr < numRows; hr++) {
           if (grid[hr][0] === timeCell) rows[hr].classList.add('current-time-row');
@@ -747,20 +711,499 @@
     }
   }
 
+  function startKeepAlive() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 2, audioCtx.sampleRate);
+    const src = audioCtx.createBufferSource();
+    const silentGain = audioCtx.createGain();
+    silentGain.gain.value = 0.001;
+    src.buffer = buf;
+    src.loop = true;
+    src.connect(silentGain);
+    silentGain.connect(audioCtx.destination);
+    src.start();
+  }
+  function unlockAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    startKeepAlive();
+  }
+  document.addEventListener('click', unlockAudio, { once: true });
+  document.addEventListener('touchstart', unlockAudio, { once: true });
+
   const now = new Date();
   highlight(now.getDay() || 7, now.getHours() * 60 + now.getMinutes());
 
-  setInterval(() => {
+  // 调试面板
+  const panel = document.createElement('div');
+  panel.id = 'debug-panel';
+  panel.innerHTML = `
+    <style>
+      #debug-panel {
+        position: fixed; bottom: 16px; right: 16px; z-index: 999;
+        background: rgba(0,0,0,0.85); color: #fff; padding: 14px 18px;
+        border-radius: 12px; font-size: 14px; font-family: sans-serif;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        transition: all 0.3s ease;
+      }
+      #debug-panel.collapsed { padding: 8px 12px; background: rgba(0,0,0,0.7); }
+      #debug-panel.collapsed .dbg-body,
+      #debug-panel.collapsed .dbg-title { display: none; }
+      #debug-panel label { display: block; margin-bottom: 8px; font-weight: 600; }
+      #debug-panel select, #debug-panel input {
+        padding: 4px 8px; border-radius: 6px; border: none; font-size: 14px; margin-left: 6px;
+      }
+      #debug-panel .row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+      #debug-panel .time-display { color: #fbd38d; font-weight: 700; min-width: 50px; }
+      #debug-panel button {
+        margin-top: 6px; padding: 4px 12px; border: none; border-radius: 6px;
+        background: #4299e1; color: #fff; cursor: pointer; font-size: 13px;
+      }
+      #debug-panel button:hover { background: #3182ce; }
+      #dbg-toggle {
+        position: absolute; top: 8px; right: 8px;
+        background: none; border: none; color: #fbd38d;
+        font-size: 18px; cursor: pointer; margin: 0; padding: 0;
+      }
+    </style>
+    <button id="dbg-toggle">▶</button>
+    <div class="dbg-title" style="margin-bottom: 8px; font-weight: 700; color: #fbd38d;">🛠 调试面板</div>
+    <div class="dbg-body">
+      <div class="row">
+        <label>星期
+          <select id="dbg-day">
+            <option value="1">周一</option><option value="2">周二</option>
+            <option value="3">周三</option><option value="4">周四</option>
+            <option value="5">周五</option><option value="6">周六</option>
+            <option value="7">周日</option>
+          </select>
+        </label>
+      </div>
+      <div class="row">
+        <label>时间 <input type="range" id="dbg-time" min="0" max="1439" value="540" style="width:160px"></label>
+        <span class="time-display" id="dbg-time-label">09:00</span>
+      </div>
+      <button id="dbg-reset">恢复当前时间</button>
+    </div>
+  `;
+  panel.style.display = 'none';
+  panel.classList.add('collapsed');
+  document.body.appendChild(panel);
+
+  let tapCount = 0, tapTimer = null;
+  const title = document.querySelector('h1');
+  if (title) {
+    title.addEventListener('click', () => {
+      tapCount++;
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => tapCount = 0, 2000);
+      if (tapCount >= 5) {
+        tapCount = 0;
+        panel.style.display = '';
+        panel.classList.remove('collapsed');
+        toggleBtn.textContent = '◀';
+      }
+    });
+  }
+
+  const daySelect = document.getElementById('dbg-day');
+  const timeSlider = document.getElementById('dbg-time');
+  const timeLabel = document.getElementById('dbg-time-label');
+  const resetBtn = document.getElementById('dbg-reset');
+
+  daySelect.value = now.getDay() || 7;
+  timeSlider.value = now.getHours() * 60 + now.getMinutes();
+
+  function formatMins(m) {
+    return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0');
+  }
+  timeLabel.textContent = formatMins(+timeSlider.value);
+
+  function onUpdate() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const mins = +timeSlider.value;
+    timeLabel.textContent = formatMins(mins);
+    highlight(+daySelect.value, mins);
+  }
+
+  const toggleBtn = document.getElementById('dbg-toggle');
+  toggleBtn.addEventListener('click', () => {
+    if (!panel.classList.contains('collapsed')) {
+      panel.style.display = 'none';
+      panel.classList.add('collapsed');
+    }
+  });
+
+  let debugMode = false;
+  daySelect.addEventListener('change', () => { debugMode = true; onUpdate(); });
+  timeSlider.addEventListener('input', () => { debugMode = true; onUpdate(); });
+  resetBtn.addEventListener('click', () => {
+    debugMode = false;
     const n = new Date();
-    highlight(n.getDay() || 7, n.getHours() * 60 + n.getMinutes());
+    daySelect.value = n.getDay() || 7;
+    timeSlider.value = n.getHours() * 60 + n.getMinutes();
+    onUpdate();
+  });
+
+  let lastReminder = '';
+  function checkPreClassReminder(col, mins) {
+    for (let r = 0; r < numRows; r++) {
+      const timeCell = grid[r][0];
+      if (!timeCell) continue;
+      const match = timeCell.textContent.trim().match(/(\d{2}):(\d{2})\s*-/);
+      if (!match) continue;
+      const startMins = parseInt(match[1]) * 60 + parseInt(match[2]);
+      const diff = startMins - mins;
+      if (diff >= 4 && diff <= 6) {
+        const cell = grid[r][col];
+        if (!cell) continue;
+        const txt = cell.textContent || '';
+        if (txt.includes('思维') || txt.includes('Polly')) {
+          const key = col + '-' + startMins;
+          if (lastReminder !== key) {
+            lastReminder = key;
+            playBell();
+          }
+        }
+      }
+    }
+  }
+
+  setInterval(() => {
+    if (debugMode) return;
+    const n = new Date();
+    const col = n.getDay() || 7;
+    const mins = n.getHours() * 60 + n.getMinutes();
+    daySelect.value = col;
+    timeSlider.value = mins;
+    timeLabel.textContent = formatMins(mins);
+    highlight(col, mins);
+    checkPreClassReminder(col, mins);
   }, 30000);
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
+    if (!document.hidden && !debugMode) {
       const n = new Date();
-      highlight(n.getDay() || 7, n.getHours() * 60 + n.getMinutes());
+      const col = n.getDay() || 7;
+      const mins = n.getHours() * 60 + n.getMinutes();
+      daySelect.value = col;
+      timeSlider.value = mins;
+      timeLabel.textContent = formatMins(mins);
+      highlight(col, mins);
     }
   });
+})();
+
+// 点击装饰图标的全屏动画效果
+(function() {
+  let audioCtx;
+  const fxStyle = document.createElement('style');
+  fxStyle.textContent = `
+    @keyframes flap {
+      0%, 100% { transform: scaleX(1) scaleY(1); }
+      50% { transform: scaleX(0.3) scaleY(1.1); }
+    }
+    .butterfly-wrap {
+      position: absolute;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+    .butterfly-inner {
+      animation: flap 0.2s ease-in-out infinite;
+      display: inline-block;
+    }
+  `;
+  document.head.appendChild(fxStyle);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'fx-overlay';
+  overlay.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;overflow:hidden;';
+  document.body.appendChild(overlay);
+
+  const effects = {
+    '🌈': { particles: ['🌈','🌈','🌈'], type: 'rainbow' },
+    '📚': { particles: ['📕','📗','📘','📙','📖'], type: 'fall' },
+    '🎵': { particles: ['🎵','🎶','♪','♫','🎵'], type: 'rise' },
+    '⭐': { particles: ['⭐','✨','💫','⭐','✨'], type: 'scatter' },
+    '🏀': { particles: ['🏀','🏀','🏀','🏀'], type: 'bounce' },
+    '🎨': { particles: ['🔴','🟡','🔵','🟢','🟣','🟠'], type: 'scatter' },
+    '🌻': { particles: ['🌻','🌼','🌺','🌸','🌷','💐'], type: 'grow' },
+    '🦋': { particles: ['🦋','🦋','🦋','🦋','🦋'], type: 'flutter' },
+    '🎈': { particles: ['🎈','🎈','🎈','🎈','🎈'], type: 'rise' },
+    '🐳': { particles: [], type: 'whale' },
+    '🌟': { particles: ['🌟','✨','💫','⭐','🌟','✨'], type: 'scatter' },
+    '🎹': { particles: ['🎵','🎶','🎹','♪','🎵','🎶'], type: 'rise' },
+    '🐱': { particles: [], type: 'cat' },
+    '🎯': { particles: ['🎯','💥','✨','🎯','💥'], type: 'scatter' },
+    '🌸': { particles: ['🌸','🌸','🌸','🌸','🌸','🌸'], type: 'fall' },
+    '🦄': { particles: [], type: 'unicorn' },
+    '🍭': { particles: ['🍭','🍬','🍫','🧁','🍩','🍪'], type: 'fall' },
+    '🐰': { particles: ['🐰','🥕','🐰','🥕','🐰'], type: 'bounce' },
+    '🎪': { particles: ['🎊','🎉','🎊','🎉','🎊','🎉'], type: 'scatter' },
+    '🌞': { particles: ['🌞','☀️','🌤','⭐','✨','🌞'], type: 'scatter' },
+  };
+
+  function spawnParticle(emoji, type, delay) {
+    const el = document.createElement('div');
+    el.textContent = emoji;
+    el.style.cssText = 'position:absolute;font-size:' + (30 + Math.random() * 40) + 'px;will-change:transform,opacity;pointer-events:none;';
+    const x = Math.random() * 100;
+    const dur = 2000 + Math.random() * 2000;
+
+    if (type === 'fall') {
+      el.style.left = x + 'vw'; el.style.top = '-60px';
+      el.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: 'translateY(105vh) rotate(' + (Math.random() * 360) + 'deg)', opacity: 0.6 }
+      ], { duration: dur, delay: delay, fill: 'forwards' });
+    } else if (type === 'rise') {
+      el.style.left = x + 'vw'; el.style.bottom = '-60px'; el.style.top = 'auto';
+      el.animate([
+        { transform: 'translateY(0) scale(0.5)', opacity: 0 },
+        { transform: 'translateY(-20vh) scale(1)', opacity: 1, offset: 0.2 },
+        { transform: 'translateY(-110vh) scale(1.2)', opacity: 0 }
+      ], { duration: dur, delay: delay, fill: 'forwards' });
+    } else if (type === 'scatter') {
+      el.style.left = '50vw'; el.style.top = '50vh';
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 40 + Math.random() * 50;
+      el.animate([
+        { transform: 'translate(0,0) scale(0)', opacity: 1 },
+        { transform: 'translate(0,0) scale(1.5)', opacity: 1, offset: 0.15 },
+        { transform: 'translate(' + (Math.cos(angle)*dist) + 'vw,' + (Math.sin(angle)*dist) + 'vh) scale(1) rotate(' + (Math.random()*360) + 'deg)', opacity: 0 }
+      ], { duration: dur, delay: delay, fill: 'forwards' });
+    } else if (type === 'bounce') {
+      el.style.left = x + 'vw'; el.style.top = '-60px';
+      el.animate([
+        { transform: 'translateY(0)', opacity: 1 },
+        { transform: 'translateY(70vh)', opacity: 1, offset: 0.3 },
+        { transform: 'translateY(40vh)', opacity: 1, offset: 0.5 },
+        { transform: 'translateY(70vh)', opacity: 1, offset: 0.65 },
+        { transform: 'translateY(55vh)', opacity: 1, offset: 0.8 },
+        { transform: 'translateY(70vh)', opacity: 0 }
+      ], { duration: dur, delay: delay, fill: 'forwards' });
+    } else if (type === 'flutter') {
+      el.remove();
+      const wrap = document.createElement('div');
+      wrap.className = 'butterfly-wrap';
+      const fromLeft = Math.random() > 0.5;
+      wrap.style.left = (fromLeft ? -10 : 110) + 'vw';
+      wrap.style.top = (15 + Math.random() * 60) + 'vh';
+      wrap.style.fontSize = (35 + Math.random() * 30) + 'px';
+      const inner = document.createElement('span');
+      inner.className = 'butterfly-inner';
+      inner.textContent = emoji;
+      wrap.appendChild(inner);
+      const dir = fromLeft ? 1 : -1;
+      const keyframes = [{ transform: 'translateX(0) translateY(0) rotate(0deg)', opacity: 0 }];
+      for (let s = 1; s <= 8; s++) {
+        const pct = s / 8;
+        keyframes.push({
+          transform: 'translateX(' + (dir * pct * 120) + 'vw) translateY(' + (Math.sin(pct * Math.PI * 3) * 15) + 'vh) rotate(' + (Math.sin(pct * Math.PI * 4) * 20) + 'deg)',
+          opacity: pct < 0.1 ? pct * 10 : pct > 0.85 ? (1 - pct) * 6.6 : 1,
+          offset: pct
+        });
+      }
+      wrap.animate(keyframes, { duration: 4000 + Math.random() * 2000, delay: delay, fill: 'forwards' });
+      overlay.appendChild(wrap);
+      setTimeout(() => wrap.remove(), 6500 + delay);
+      return;
+    } else if (type === 'grow') {
+      el.style.left = x + 'vw'; el.style.top = (30 + Math.random() * 50) + 'vh';
+      el.animate([
+        { transform: 'scale(0) rotate(-30deg)', opacity: 0 },
+        { transform: 'scale(1.3) rotate(10deg)', opacity: 1, offset: 0.4 },
+        { transform: 'scale(1.5) rotate(-5deg)', opacity: 1, offset: 0.7 },
+        { transform: 'scale(1.8) rotate(0deg)', opacity: 0 }
+      ], { duration: dur + 500, delay: delay, fill: 'forwards' });
+    }
+    overlay.appendChild(el);
+    setTimeout(() => el.remove(), dur + delay + 500);
+  }
+
+  function triggerEffect(emoji) {
+    const cfg = effects[emoji];
+    if (!cfg) return;
+    const count = 15 + Math.floor(Math.random() * 10);
+    for (let i = 0; i < count; i++) {
+      const p = cfg.particles[Math.floor(Math.random() * cfg.particles.length)];
+      spawnParticle(p, cfg.type, i * 80);
+    }
+  }
+
+  const soundMap = {
+    '🌈': 'chime', '📚': 'fall', '🎵': 'melody', '⭐': 'sparkle',
+    '🏀': 'bounce', '🎨': 'splash', '🌻': 'grow', '🦋': 'flutter',
+    '🎈': 'rise', '🐳': 'whale', '🌟': 'sparkle', '🎹': 'music',
+    '🐱': 'meow', '🎯': 'hit', '🌸': 'fall', '🦄': 'chime',
+    '🍭': 'pop', '🐰': 'bounce', '🎪': 'fanfare', '🌞': 'sparkle',
+  };
+
+  let clickSoundNodes = null;
+  function stopClickSound() {
+    if (!clickSoundNodes) return;
+    const { oscs, master, ctx } = clickSoundNodes;
+    const t = ctx.currentTime;
+    master.gain.cancelScheduledValues(t);
+    master.gain.setValueAtTime(master.gain.value, t);
+    master.gain.linearRampToValueAtTime(0, t + 0.15);
+    oscs.forEach(o => { try { o.stop(t + 0.2); } catch(e){} });
+    clickSoundNodes = null;
+  }
+  window._stopClickSound = stopClickSound;
+
+  function playSound(type) {
+    stopClickSound();
+    if (window._stopBell) window._stopBell();
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const ctx = audioCtx;
+    const t = ctx.currentTime;
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.25, t);
+    master.connect(ctx.destination);
+    const oscs = [];
+    const _createOsc = ctx.createOscillator.bind(ctx);
+    ctx.createOscillator = function() { const o = _createOsc(); oscs.push(o); return o; };
+
+    if (type === 'sparkle') {
+      [1200, 1600, 2000, 2400].forEach((f, i) => {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(f, t + i * 0.08);
+        g.gain.setValueAtTime(0.3, t + i * 0.08); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.08 + 0.3);
+        o.connect(g); g.connect(master); o.start(t + i * 0.08); o.stop(t + i * 0.08 + 0.35);
+      });
+    } else if (type === 'chime') {
+      [523, 659, 784, 1047, 1319].forEach((f, i) => {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(f, t + i * 0.12);
+        g.gain.setValueAtTime(0.3, t + i * 0.12); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.12 + 0.5);
+        o.connect(g); g.connect(master); o.start(t + i * 0.12); o.stop(t + i * 0.12 + 0.55);
+      });
+    } else if (type === 'bounce') {
+      [300, 500, 400, 600, 350].forEach((f, i) => {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'triangle'; o.frequency.setValueAtTime(f, t + i * 0.1);
+        o.frequency.exponentialRampToValueAtTime(f * 0.5, t + i * 0.1 + 0.15);
+        g.gain.setValueAtTime(0.4, t + i * 0.1); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.1 + 0.2);
+        o.connect(g); g.connect(master); o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.25);
+      });
+    } else if (type === 'music') {
+      const b = 0.32;
+      const notes = [
+        {f:392,s:0},{f:392,s:b},{f:440,s:b*2},{f:494,s:b*3},{f:523,s:b*4,d:b*1.2},
+        {f:523,s:b*6},{f:587,s:b*7},{f:330,s:b*8},{f:587,s:b*9},
+        {f:523,s:b*10},{f:494,s:b*11},{f:440,s:b*12},{f:494,s:b*13},{f:392,s:b*14,d:b*1.2},
+        {f:440,s:b*16},{f:392,s:b*17},{f:370,s:b*18},{f:330,s:b*19},{f:294,s:b*20,d:b*1.5},
+        {f:392,s:b*22},{f:392,s:b*23},{f:440,s:b*24},{f:494,s:b*25},{f:523,s:b*26,d:b*1.2},
+        {f:523,s:b*28},{f:587,s:b*29},{f:330,s:b*30},{f:587,s:b*31},
+        {f:523,s:b*32},{f:494,s:b*33},{f:440,s:b*34},{f:494,s:b*35},{f:392,s:b*36,d:b*1.2},
+        {f:440,s:b*38},{f:494,s:b*39},{f:440,s:b*40},{f:392,s:b*41},{f:370,s:b*42},{f:392,s:b*43,d:b*2},
+      ];
+      notes.forEach(n => {
+        const len = n.d || b * 0.85; const offset = t + n.s;
+        [1, 2, 3].forEach(r => {
+          const o = ctx.createOscillator(); const g = ctx.createGain();
+          o.type = 'sine'; o.frequency.setValueAtTime(n.f * r, offset);
+          g.gain.setValueAtTime((r === 1 ? 0.3 : 0.06 / r), offset);
+          g.gain.exponentialRampToValueAtTime(0.01, offset + len);
+          o.connect(g); g.connect(master); o.start(offset); o.stop(offset + len + 0.05);
+        });
+      });
+    } else if (type === 'fall') {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(800, t); o.frequency.exponentialRampToValueAtTime(200, t + 0.8);
+      g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.8);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.85);
+    } else if (type === 'rise') {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(200, t); o.frequency.exponentialRampToValueAtTime(1200, t + 0.8);
+      g.gain.setValueAtTime(0.2, t); g.gain.linearRampToValueAtTime(0.35, t + 0.4); g.gain.exponentialRampToValueAtTime(0.01, t + 0.8);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.85);
+    } else if (type === 'splash') {
+      [400, 600, 800, 500, 700].forEach((f, i) => {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'sawtooth'; o.frequency.setValueAtTime(f, t + i * 0.05); o.frequency.exponentialRampToValueAtTime(f * 0.3, t + i * 0.05 + 0.2);
+        g.gain.setValueAtTime(0.15, t + i * 0.05); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.05 + 0.25);
+        o.connect(g); g.connect(master); o.start(t + i * 0.05); o.stop(t + i * 0.05 + 0.3);
+      });
+    } else if (type === 'flutter') {
+      for (let i = 0; i < 8; i++) {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(800 + Math.sin(i) * 300, t + i * 0.07);
+        g.gain.setValueAtTime(0.15, t + i * 0.07); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.07 + 0.12);
+        o.connect(g); g.connect(master); o.start(t + i * 0.07); o.stop(t + i * 0.07 + 0.15);
+      }
+    } else if (type === 'whale') {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(150, t); o.frequency.linearRampToValueAtTime(400, t + 0.5); o.frequency.linearRampToValueAtTime(120, t + 1.2);
+      g.gain.setValueAtTime(0.3, t); g.gain.linearRampToValueAtTime(0.35, t + 0.5); g.gain.exponentialRampToValueAtTime(0.01, t + 1.5);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 1.6);
+    } else if (type === 'meow') {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(500, t); o.frequency.linearRampToValueAtTime(900, t + 0.15); o.frequency.linearRampToValueAtTime(400, t + 0.6);
+      g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.65);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.7);
+    } else if (type === 'hit') {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'square'; o.frequency.setValueAtTime(600, t); o.frequency.exponentialRampToValueAtTime(1200, t + 0.05);
+      g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.25);
+    } else if (type === 'pop') {
+      [500, 700, 900].forEach((f, i) => {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(f, t + i * 0.1); o.frequency.exponentialRampToValueAtTime(f * 1.5, t + i * 0.1 + 0.05);
+        g.gain.setValueAtTime(0.3, t + i * 0.1); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.1 + 0.15);
+        o.connect(g); g.connect(master); o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.2);
+      });
+    } else if (type === 'grow') {
+      const o = ctx.createOscillator(); const g = ctx.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(300, t); o.frequency.exponentialRampToValueAtTime(800, t + 0.6);
+      g.gain.setValueAtTime(0.1, t); g.gain.linearRampToValueAtTime(0.3, t + 0.4); g.gain.exponentialRampToValueAtTime(0.01, t + 0.8);
+      o.connect(g); g.connect(master); o.start(t); o.stop(t + 0.85);
+    } else if (type === 'fanfare') {
+      [523, 659, 784, 1047].forEach((f, i) => {
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'triangle'; o.frequency.setValueAtTime(f, t + i * 0.1);
+        g.gain.setValueAtTime(0.3, t + i * 0.1); g.gain.exponentialRampToValueAtTime(0.01, t + i * 0.1 + 0.4);
+        o.connect(g); g.connect(master); o.start(t + i * 0.1); o.stop(t + i * 0.1 + 0.45);
+      });
+    } else if (type === 'melody') {
+      const notes = [523,523,784,784,880,880,784,0,698,698,659,659,587,587,523];
+      const beat = 0.4;
+      notes.forEach((f, i) => {
+        if (f === 0) return;
+        const offset = t + i * beat;
+        const o = ctx.createOscillator(); const g = ctx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(f, offset);
+        g.gain.setValueAtTime(0.35, offset); g.gain.exponentialRampToValueAtTime(0.01, offset + beat * 0.9);
+        o.connect(g); g.connect(master); o.start(offset); o.stop(offset + beat);
+      });
+    }
+    ctx.createOscillator = _createOsc;
+    clickSoundNodes = { oscs, master, ctx };
+  }
+
+  function handleClick(span) {
+    span.style.cursor = 'pointer';
+    span.style.userSelect = 'none';
+    span.addEventListener('click', (e) => {
+      e.stopPropagation();
+      span.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.6) rotate(15deg)' },
+        { transform: 'scale(1)' }
+      ], { duration: 400 });
+      const emoji = span.textContent.trim();
+      const sType = soundMap[emoji];
+      if (sType) playSound(sType);
+      triggerEffect(emoji);
+    });
+  }
+
+  document.querySelectorAll('.deco-side span').forEach(handleClick);
+  document.querySelectorAll('.corner-deco').forEach(handleClick);
 })();
 </script>
 </body>
